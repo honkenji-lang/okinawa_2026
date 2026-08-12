@@ -265,6 +265,9 @@
             <button onclick="switchTab('checklist')" id="tab-btn-checklist" class="tab-btn shrink-0 px-4 py-2 rounded-lg text-slate-600 hover:text-slate-900 transition-all">
                 <i class="fa-solid fa-list-check mr-1.5"></i>持ち物チェック
             </button>
+            <button onclick="switchTab('comments')" id="tab-btn-comments" class="tab-btn shrink-0 px-4 py-2 rounded-lg text-slate-600 hover:text-slate-900 transition-all">
+                <i class="fa-solid fa-comment-dots mr-1.5"></i>メモ・意見投稿 (GitHub Issue)
+            </button>
         </div>
 
         <!-- TAB 1: ITINERARY CONTENT -->
@@ -847,6 +850,74 @@
             </div>
         </section>
 
+        <!-- TAB 5: COMMENTS & GITHUB ISSUE SUBMISSION -->
+        <section id="tab-comments" class="hidden space-y-4">
+            <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs space-y-4">
+                <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-base sm:text-lg flex items-center gap-2">
+                            <i class="fa-solid fa-comment-dots text-ocean-600"></i>
+                            旅のメモ・ご意見・変更案の投稿 (GitHub Issue連動)
+                        </h3>
+                        <p class="text-xs text-slate-500 mt-0.5">
+                            ここから提出されたご意見や変更案は、GitHub (honkenji-lang/okinawa_2026) の新規Issueとしてリアルタイム自動登録されます。
+                        </p>
+                    </div>
+                    <span class="hidden sm:inline-block bg-slate-100 text-slate-600 text-xs px-2.5 py-1 rounded font-mono border border-slate-200">
+                        <i class="fa-brands fa-github mr-1"></i>okinawa_2026
+                    </span>
+                </div>
+
+                <!-- Live Issue Creation Result Alert (Hidden by default) -->
+                <div id="issue-alert" class="hidden p-3.5 rounded-xl text-xs flex items-center justify-between transition-all">
+                    <!-- Populated dynamically by JS -->
+                </div>
+
+                <!-- Issue Form -->
+                <form id="issue-form" onsubmit="submitGitHubIssue(event)" class="space-y-3 text-xs">
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">カテゴリー</label>
+                        <select id="issue-category" class="w-full p-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-ocean-500 focus:border-ocean-500 text-xs bg-white">
+                            <option value="🗓 スケジュール調整">🗓 スケジュール調整案</option>
+                            <option value="🍽 レストラン・グルメ">🍽 レストラン・グルメ追加</option>
+                            <option value="🚗 交通・アクセス">🚗 交通・アクセス・レンタカー</option>
+                            <option value="🎒 持ち物・準備">🎒 持ち物・準備メモ</option>
+                            <option value="💬 その他ご意見">💬 その他ご意見・メモ</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">タイトル・件名 <span class="text-rose-500">*</span></label>
+                        <input type="text" id="issue-title" required placeholder="例: 2日目の夕食時間を18:30に変更希望" class="w-full p-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-ocean-500 focus:border-ocean-500 text-xs">
+                    </div>
+
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">詳細内容・メッセージ</label>
+                        <textarea id="issue-body" rows="4" placeholder="例: 琉球の牛の予約時間を少し早めて、食後にホテルのプールサイドでのんびりカクテルを飲みたいです。" class="w-full p-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-ocean-500 focus:border-ocean-500 text-xs"></textarea>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-1">
+                        <span class="text-[11px] text-slate-400">※「送信」を押すとGitHub API経由でリアルタイムIssue作成されます。</span>
+                        <button type="submit" id="issue-submit-btn" class="bg-ocean-600 hover:bg-ocean-700 text-white font-bold px-5 py-2.5 rounded-lg text-xs shadow-xs transition-all flex items-center gap-2">
+                            <i class="fa-solid fa-paper-plane"></i>
+                            <span>GitHub Issueを作成する</span>
+                        </button>
+                    </div>
+                </form>
+
+                <!-- History of Submitted Issues (stored in localStorage) -->
+                <div class="pt-3 border-t border-slate-200 space-y-2">
+                    <h4 class="font-bold text-slate-700 text-xs flex items-center justify-between">
+                        <span><i class="fa-solid fa-list-ul text-slate-500 mr-1"></i>送信済みのIssue履歴</span>
+                        <span id="issue-history-count" class="text-[10px] text-slate-400">0件</span>
+                    </h4>
+                    <div id="issue-history-list" class="space-y-1.5 text-xs text-slate-600">
+                        <p class="text-slate-400 text-[11px] italic">まだ投稿されたIssueはありません。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- MAP SECTION -->
         <section id="map-section" class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs space-y-3 reveal-on-scroll">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
@@ -910,7 +981,7 @@
 
         // --- 2. Tab Switcher ---
         function switchTab(tabName) {
-            const tabs = ['itinerary', 'gourmet', 'access', 'checklist'];
+            const tabs = ['itinerary', 'gourmet', 'access', 'checklist', 'comments'];
             tabs.forEach(t => {
                 const sec = document.getElementById('tab-' + t);
                 const btn = document.getElementById('tab-btn-' + t);
@@ -1029,6 +1100,7 @@
 
             document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
             loadChecklistState();
+            renderIssueHistory();
         });
 
         // --- 6. Interactive Checklist Storage ---
@@ -1073,6 +1145,142 @@
             checkboxes.forEach(cb => cb.checked = false);
             localStorage.removeItem('okinawa_checklist_2026');
             updateChecklistProgress();
+        }
+
+        // --- 7. GitHub Issue API & Web Form Submission ---
+        const GITHUB_REPO = 'honkenji-lang/okinawa_2026';
+
+        async function submitGitHubIssue(event) {
+            event.preventDefault();
+            const category = document.getElementById('issue-category').value;
+            const titleInput = document.getElementById('issue-title').value.trim();
+            const bodyInput = document.getElementById('issue-body').value.trim();
+            const btn = document.getElementById('issue-submit-btn');
+            const alertEl = document.getElementById('issue-alert');
+
+            if (!titleInput) return;
+
+            const issueTitle = `[${category}] ${titleInput}`;
+            const issueBody = `${bodyInput}\n\n---\n*※このIssueは 「沖縄本島 旅のしおり 2026」 Webアプリから提出されました。*`;
+
+            const savedToken = localStorage.getItem('okinawa_gh_token');
+
+            // If GitHub PAT is saved in localStorage, attempt direct API call
+            if (savedToken) {
+                btn.disabled = true;
+                btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> <span>送信中...</span>`;
+                alertEl.classList.add('hidden');
+
+                try {
+                    const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/issues`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `token ${savedToken}`,
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/vnd.github+json'
+                        },
+                        body: JSON.stringify({ title: issueTitle, body: issueBody })
+                    });
+
+                    if (res.ok) {
+                        const data = await res.json();
+                        alertEl.className = "p-3.5 rounded-xl text-xs flex items-center justify-between transition-all bg-emerald-50 border border-emerald-200 text-emerald-900";
+                        alertEl.innerHTML = `
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-circle-check text-emerald-600 text-base"></i>
+                                <div>
+                                    <strong>GitHub Issue #${data.number} をリアルタイム作成しました！</strong>
+                                    <p class="text-[11px] text-emerald-700 font-medium">${escapeHtml(data.title)}</p>
+                                </div>
+                            </div>
+                            <a href="${data.html_url}" target="_blank" class="bg-emerald-600 text-white font-bold px-3 py-1.5 rounded text-[11px] hover:bg-emerald-700 shrink-0 ml-2">
+                                GitHubで見る <i class="fa-solid fa-up-right-from-square ml-1"></i>
+                            </a>`;
+                        alertEl.classList.remove('hidden');
+
+                        document.getElementById('issue-title').value = '';
+                        document.getElementById('issue-body').value = '';
+
+                        saveIssueToHistory({
+                            number: data.number,
+                            title: data.title,
+                            url: data.html_url,
+                            date: new Date().toLocaleString('ja-JP')
+                        });
+                        return;
+                    }
+                } catch (e) {
+                    console.error("Direct API submission error:", e);
+                } finally {
+                    btn.disabled = false;
+                    btn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> <span>GitHub Issueを作成する</span>`;
+                }
+            }
+
+            // Fallback: 1-Click Pre-filled GitHub Issue URL
+            const githubIssueUrl = `https://github.com/${GITHUB_REPO}/issues/new?title=${encodeURIComponent(issueTitle)}&body=${encodeURIComponent(issueBody)}`;
+            
+            window.open(githubIssueUrl, '_blank');
+
+            alertEl.className = "p-3.5 rounded-xl text-xs flex items-center justify-between transition-all bg-sky-50 border border-sky-200 text-sky-900";
+            alertEl.innerHTML = `
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-arrow-up-right-from-square text-sky-600 text-base"></i>
+                    <div>
+                        <strong>GitHub Issue作成画面を開きました！</strong>
+                        <p class="text-[11px] text-sky-700 font-medium">${escapeHtml(issueTitle)}</p>
+                    </div>
+                </div>
+                <a href="${githubIssueUrl}" target="_blank" class="bg-sky-600 text-white font-bold px-3 py-1.5 rounded text-[11px] hover:bg-sky-700 shrink-0 ml-2">
+                    GitHubで開く <i class="fa-solid fa-up-right-from-square ml-1"></i>
+                </a>`;
+            alertEl.classList.remove('hidden');
+
+            saveIssueToHistory({
+                number: 'NEW',
+                title: issueTitle,
+                url: githubIssueUrl,
+                date: new Date().toLocaleString('ja-JP')
+            });
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/[&<>"']/g, function(m) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
+            });
+        }
+
+        function saveIssueToHistory(item) {
+            const list = JSON.parse(localStorage.getItem('okinawa_issue_history') || '[]');
+            list.unshift(item);
+            localStorage.setItem('okinawa_issue_history', JSON.stringify(list));
+            renderIssueHistory();
+        }
+
+        function renderIssueHistory() {
+            const list = JSON.parse(localStorage.getItem('okinawa_issue_history') || '[]');
+            const container = document.getElementById('issue-history-list');
+            const countEl = document.getElementById('issue-history-count');
+            if (!container) return;
+
+            if (countEl) countEl.textContent = `${list.length}件`;
+
+            if (list.length === 0) {
+                container.innerHTML = `<p class="text-slate-400 text-[11px] italic">まだ投稿されたIssueはありません。</p>`;
+                return;
+            }
+
+            container.innerHTML = list.map(item => `
+                <div class="p-2 bg-slate-50 border border-slate-200 rounded-lg flex items-center justify-between text-[11px]">
+                    <div class="truncate mr-2">
+                        <span class="font-bold text-slate-800">#${item.number} ${escapeHtml(item.title)}</span>
+                        <span class="text-slate-400 text-[10px] ml-2">${item.date}</span>
+                    </div>
+                    <a href="${item.url}" target="_blank" class="text-sky-600 font-bold hover:underline shrink-0">
+                        開く <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                    </a>
+                </div>
+            `).join('');
         }
 
         // --- 7. Map Spots Data & Leaflet Initialization ---
