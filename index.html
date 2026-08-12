@@ -162,8 +162,8 @@
                     <!-- Flight & Bus Quick Badges -->
                     <div class="bg-slate-900/50 backdrop-blur-md border border-white/20 p-2.5 rounded-xl text-xs space-y-1 shrink-0 shadow-md">
                         <div class="flex items-center justify-between gap-3">
-                            <span class="text-sky-200 font-semibold"><i class="fa-solid fa-plane-departure text-sky-300 mr-1"></i>往路 (ANA):</span>
-                            <span class="font-bold">NH461(06:10) / NH993(06:40)</span>
+                            <span class="text-sky-200 font-semibold"><i class="fa-solid fa-plane-departure text-sky-300 mr-1"></i>往路便 (ANA):</span>
+                            <span class="font-bold text-amber-300">NH993 (06:40羽田発 ➔ 09:25那覇着)</span>
                         </div>
                         <div class="flex items-center justify-between gap-3">
                             <span class="text-rose-200 font-semibold"><i class="fa-solid fa-plane-arrival text-rose-300 mr-1"></i>復路 (ANA):</span>
@@ -375,19 +375,19 @@
                     </div>
                     <div id="body-day1" class="p-4 space-y-3 text-xs sm:text-sm bg-white">
                         <div class="p-2.5 bg-sky-50 border border-sky-200 rounded-lg text-sky-900 text-xs">
-                            <i class="fa-solid fa-circle-info mr-1 text-sky-600"></i> <strong>早朝アクセスポイント:</strong> 船橋駅南口(04:55 / 05:25発)のリムジンバスで羽田T2へスムーズアクセス！
+                            <i class="fa-solid fa-circle-info mr-1 text-sky-600"></i> <strong>早朝アクセス:</strong> 船橋駅南口(05:25発)のリムジンバスで羽田T2(06:15着)へスムーズ乗り継ぎ！
                         </div>
 
                         <ul class="relative border-l-2 border-sky-300 ml-3 space-y-3.5 pl-4 text-xs">
                             <li class="relative cursor-pointer hover:bg-slate-50 p-1.5 rounded transition" onclick="scrollToMapAndFocus('funabashi_bus')">
                                 <div class="absolute -left-[23px] top-1 bg-amber-500 text-white w-4 h-4 rounded-full flex items-center justify-center text-[9px]"><i class="fa-solid fa-bus"></i></div>
-                                <div class="font-bold text-slate-800 text-sm">04:55 船橋駅発 リムジンバス乗車</div>
-                                <p class="text-slate-500">羽田空港第2ターミナル（ANA発着）へ約50分。05:45頃到着（NH461/993便に最適）。</p>
+                                <div class="font-bold text-slate-800 text-sm">05:25 船橋駅発 リムジンバス乗車</div>
+                                <p class="text-slate-500">羽田空港第2ターミナル（ANA発着）へ約50分。06:15頃到着（NH993便 06:40発にスムーズ乗り継ぎ）。</p>
                             </li>
                             <li class="relative cursor-pointer hover:bg-slate-50 p-1.5 rounded transition" onclick="scrollToMapAndFocus('haneda_t2')">
                                 <div class="absolute -left-[23px] top-1 bg-sky-600 text-white w-4 h-4 rounded-full flex items-center justify-center text-[9px]"><i class="fa-solid fa-plane"></i></div>
-                                <div class="font-bold text-slate-800 text-sm">06:10 羽田発 (NH461便) または 06:40発 (NH993便) ➔ 那覇へ</div>
-                                <p class="text-slate-500">09:00 (NH461) / 09:25 (NH993) 那覇空港に定刻到着。手荷物受け取りへ。</p>
+                                <div class="font-bold text-slate-800 text-sm">06:40 羽田空港発 (NH993便) ➔ 那覇へ</div>
+                                <p class="text-slate-500">09:25 那覇空港に定刻到着。手荷物を受け取ってレンタカー乗り場へ移動。</p>
                             </li>
                             <li class="relative cursor-pointer hover:bg-slate-50 p-1.5 rounded transition" onclick="scrollToMapAndFocus('rental_car')">
                                 <div class="absolute -left-[23px] top-1 bg-indigo-600 text-white w-4 h-4 rounded-full flex items-center justify-center text-[9px]"><i class="fa-solid fa-car"></i></div>
@@ -658,13 +658,13 @@
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-sky-100 font-mono text-[11px]">
-                                <tr class="bg-amber-100/60 font-bold text-amber-900">
+                                <tr>
                                     <td class="py-1">04:55発</td>
-                                    <td class="py-1 text-right">05:45着 (NH461用⭐)</td>
+                                    <td class="py-1 text-right">05:45着</td>
                                 </tr>
-                                <tr class="bg-amber-50 font-semibold text-slate-800">
+                                <tr class="bg-amber-100/60 font-bold text-amber-900">
                                     <td class="py-1">05:25発</td>
-                                    <td class="py-1 text-right">06:15着 (NH993用⭐)</td>
+                                    <td class="py-1 text-right">06:15着 (NH993確定便用⭐)</td>
                                 </tr>
                                 <tr>
                                     <td class="py-1">05:55発</td>
@@ -948,7 +948,7 @@
     <script>
         // --- 1. Countdown Timer ---
         function updateCountdown() {
-            const targetDate = new Date('2026-09-19T06:10:00+09:00').getTime();
+            const targetDate = new Date('2026-09-19T06:40:00+09:00').getTime();
             const now = new Date().getTime();
             const diff = targetDate - now;
 
