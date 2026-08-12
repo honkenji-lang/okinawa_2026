@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>沖縄本島 旅のしおり 2026（9/19〜9/21）</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ocean: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                            700: '#0f766e',
+                            800: '#115e59',
+                            900: '#134e4a',
+                        },
+                        tropical: {
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                        },
+                        hibiscus: {
+                            500: '#f43f5e',
+                            600: '#e11d48',
+                            700: '#be123c',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Leaflet CSS & JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap');
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #f8fafc;
+        }
+        #map {
+            height: 100%;
+            width: 100%;
+            border-radius: 0.75rem;
+            z-index: 10;
+        }
+        .custom-popup .leaflet-popup-content-wrapper {
+            border-radius: 12px;
+            padding: 4px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+        }
+        .tab-btn.active {
+            background-color: #0d9488;
+            color: #ffffff;
+            font-weight: 700;
+            box-shadow: 0 2px 4px rgba(13, 148, 136, 0.25);
+        }
+
+        /* --- Dynamic Animations & Effects --- */
+        @keyframes tropicalSway {
+            0%, 100% { transform: rotate(-4deg) translateY(0); }
+            50% { transform: rotate(5deg) translateY(-3px); }
+        }
+        .animate-sway {
+            display: inline-block;
+            animation: tropicalSway 3.5s ease-in-out infinite;
+        }
+
+        @keyframes waveFlow {
+            0% { transform: translateX(0) scaleY(1); }
+            50% { transform: translateX(-2%) scaleY(1.04); }
+            100% { transform: translateX(0) scaleY(1); }
+        }
+        .animate-wave-flow {
+            animation: waveFlow 8s ease-in-out infinite;
+        }
+
+        /* Map Dash Flow Polyline */
+        @keyframes dashFlow {
+            to { stroke-dashoffset: -28px; }
+        }
+        .leaflet-interactive[stroke-dasharray] {
+            animation: dashFlow 1.2s linear infinite;
+        }
+
+        /* Scroll Reveal Transitions */
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(18px);
+            transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
+        }
+        .reveal-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Tab Fade-In */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* Custom Scrollbar */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col justify-between">
+
+    <!-- HERO HEADER -->
+    <header class="relative bg-gradient-to-r from-ocean-900 via-ocean-700 to-sky-700 text-white shadow-lg overflow-hidden">
+        <!-- Hero Background Image Overlay with Wave Flow -->
+        <div class="absolute inset-0 z-0 opacity-35 mix-blend-overlay animate-wave-flow">
+            <img src="images/okinawa_hero_emerald.png" alt="沖縄のエメラルドブルーの海とハイビスカス" class="w-full h-full object-cover">
+        </div>
+        <div class="relative z-10 max-w-5xl mx-auto px-4 py-6 sm:py-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <div class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md px-3.5 py-1 rounded-full text-xs font-semibold mb-2.5 border border-white/30 shadow-sm">
+                        <i class="fa-solid fa-sun text-amber-300 animate-sway"></i> 沖縄本島 2泊3日 リゾートドライブ 2026
+                    </div>
+                    <h1 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight drop-shadow-sm flex items-center gap-3">
+                        <span>沖縄本島 旅のしおり</span>
+                        <span class="text-2xl sm:text-3xl animate-sway">🌺</span>
+                    </h1>
+                    <p class="text-xs sm:text-sm text-ocean-100 mt-1.5 flex items-center gap-3 flex-wrap">
+                        <span><i class="fa-regular fa-calendar text-amber-300"></i> 2026年9月19日(土) 〜 9月21日(月・祝) 【2泊3日】</span>
+                        <span><i class="fa-solid fa-hotel text-amber-300"></i> 読谷村エリア ビーチリゾート連泊（アリビラ / 残波エリア）</span>
+                    </p>
+                </div>
+                
+                <!-- Countdown & Flight Badges Container -->
+                <div class="flex flex-col sm:flex-row md:flex-col gap-2 shrink-0">
+                    <!-- Live Countdown Badge -->
+                    <div class="bg-gradient-to-r from-amber-500/30 to-rose-500/30 backdrop-blur-md border border-amber-300/40 p-2.5 rounded-xl text-xs flex items-center justify-between gap-3 shadow-md">
+                        <div class="flex items-center gap-1.5 font-semibold text-amber-200">
+                            <i class="fa-solid fa-stopwatch animate-pulse text-amber-300 text-sm"></i>
+                            <span>出発まで:</span>
+                        </div>
+                        <div id="countdown-timer" class="font-extrabold font-mono text-sm tracking-wide text-amber-300">
+                            計算中...
+                        </div>
+                    </div>
+
+                    <!-- Flight & Bus Quick Badges -->
+                    <div class="bg-slate-900/50 backdrop-blur-md border border-white/20 p-2.5 rounded-xl text-xs space-y-1 shrink-0 shadow-md">
+                        <div class="flex items-center justify-between gap-3">
+                            <span class="text-sky-200 font-semibold"><i class="fa-solid fa-plane-departure text-sky-300 mr-1"></i>往路 (ANA):</span>
+                            <span class="font-bold">NH461(06:10) / NH993(06:40)</span>
+                        </div>
+                        <div class="flex items-center justify-between gap-3">
+                            <span class="text-rose-200 font-semibold"><i class="fa-solid fa-plane-arrival text-rose-300 mr-1"></i>復路 (ANA):</span>
+                            <span class="font-bold">NH1096(19:40) / NH1098(20:05)</span>
+                        </div>
+                        <div class="flex items-center justify-between gap-3 pt-1 border-t border-white/10 text-[11px]">
+                            <span class="text-emerald-200"><i class="fa-solid fa-bus text-emerald-300 mr-1"></i>リムジン:</span>
+                            <span class="text-slate-200 font-medium">船橋/西船橋 ⇔ 羽田空港</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="max-w-5xl mx-auto px-4 py-6 w-full flex-1 space-y-6">
+
+        <!-- Quick Info Bar -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 reveal-on-scroll">
+            <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-xs flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg bg-sky-100 text-sky-600 flex items-center justify-center text-lg"><i class="fa-solid fa-plane-arrival"></i></div>
+                <div>
+                    <div class="text-[10px] text-slate-400 font-bold">発着空港</div>
+                    <div class="text-xs font-bold text-slate-700">那覇空港 (OKA)</div>
+                </div>
+            </div>
+            <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-xs flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center text-lg"><i class="fa-solid fa-bus"></i></div>
+                <div>
+                    <div class="text-[10px] text-slate-400 font-bold">自宅アクセス</div>
+                    <div class="text-xs font-bold text-slate-700">船橋/西船橋 リムジン</div>
+                </div>
+            </div>
+            <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-xs flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center text-lg"><i class="fa-solid fa-car"></i></div>
+                <div>
+                    <div class="text-[10px] text-slate-400 font-bold">沖縄現地移動</div>
+                    <div class="text-xs font-bold text-slate-700">那覇空港 送迎レンタカー</div>
+                </div>
+            </div>
+            <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-xs flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center text-lg"><i class="fa-solid fa-hotel"></i></div>
+                <div>
+                    <div class="text-[10px] text-slate-400 font-bold">宿泊拠点</div>
+                    <div class="text-xs font-bold text-slate-700">読谷村 ビーチリゾート⭐</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Weather Forecast Live Card -->
+        <div class="bg-gradient-to-r from-teal-600 via-ocean-600 to-sky-600 rounded-xl p-3.5 text-white shadow-md reveal-on-scroll">
+            <div class="flex items-center justify-between gap-2 mb-2.5">
+                <div class="flex items-center gap-2">
+                    <div class="w-9 h-9 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-amber-300 text-lg shrink-0">
+                        <i class="fa-solid fa-cloud-sun"></i>
+                    </div>
+                    <div>
+                        <span class="font-black text-sm sm:text-base">沖縄本島 旅行当日の天気予報（那覇/恩納村）</span>
+                        <p class="text-[11px] text-sky-100" id="weather-updated">予報を取得中...</p>
+                    </div>
+                </div>
+                <span class="bg-white/20 text-white text-[10px] px-2 py-0.5 rounded-full font-bold">9月中旬 秋晴れシーズン</span>
+            </div>
+            <div class="grid grid-cols-3 gap-2">
+                <div id="weather-day-1" class="bg-slate-900/35 backdrop-blur-md border border-white/20 rounded-lg p-2 text-center">
+                    <div class="text-[11px] text-sky-200 font-bold">9/19(土)</div>
+                    <div class="text-xl my-1"><i class="fa-solid fa-spinner fa-spin text-amber-300"></i></div>
+                    <div class="text-[10px] text-sky-100">取得中</div>
+                </div>
+                <div id="weather-day-2" class="bg-slate-900/35 backdrop-blur-md border border-white/20 rounded-lg p-2 text-center">
+                    <div class="text-[11px] text-sky-200 font-bold">9/20(日)</div>
+                    <div class="text-xl my-1"><i class="fa-solid fa-spinner fa-spin text-amber-300"></i></div>
+                    <div class="text-[10px] text-sky-100">取得中</div>
+                </div>
+                <div id="weather-day-3" class="bg-slate-900/35 backdrop-blur-md border border-white/20 rounded-lg p-2 text-center">
+                    <div class="text-[11px] text-sky-200 font-bold">9/21(月・祝)</div>
+                    <div class="text-xl my-1"><i class="fa-solid fa-spinner fa-spin text-amber-300"></i></div>
+                    <div class="text-[10px] text-sky-100">取得中</div>
+                </div>
+            </div>
+            <div class="mt-2.5 pt-2 border-t border-white/20 flex items-center justify-center gap-4 text-[11px]">
+                <div class="flex items-center gap-1.5"><i class="fa-solid fa-water text-sky-300 animate-pulse"></i> 満潮 (目安) <span class="font-bold text-amber-300">07:45 / 19:50</span></div>
+                <div class="flex items-center gap-1.5"><i class="fa-solid fa-umbrella-beach text-amber-300"></i> 干潮 (目安) <span class="font-bold text-sky-200">01:30 / 13:40</span></div>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="flex overflow-x-auto bg-slate-200/70 p-1 rounded-xl text-xs sm:text-sm font-medium gap-1 no-scrollbar reveal-on-scroll">
+            <button onclick="switchTab('itinerary')" id="tab-btn-itinerary" class="tab-btn active shrink-0 px-4 py-2 rounded-lg transition-all">
+                <i class="fa-solid fa-calendar-days mr-1.5"></i>タイムスケジュール
+            </button>
+            <button onclick="switchTab('gourmet')" id="tab-btn-gourmet" class="tab-btn shrink-0 px-4 py-2 rounded-lg text-slate-600 hover:text-slate-900 transition-all">
+                <i class="fa-solid fa-utensils mr-1.5"></i>グルメ＆スポット
+            </button>
+            <button onclick="switchTab('access')" id="tab-btn-access" class="tab-btn shrink-0 px-4 py-2 rounded-lg text-slate-600 hover:text-slate-900 transition-all">
+                <i class="fa-solid fa-bus-simple mr-1.5"></i>アクセス＆バス時刻表
+            </button>
+            <button onclick="switchTab('checklist')" id="tab-btn-checklist" class="tab-btn shrink-0 px-4 py-2 rounded-lg text-slate-600 hover:text-slate-900 transition-all">
+                <i class="fa-solid fa-list-check mr-1.5"></i>持ち物チェック
+            </button>
+        </div>
+
+        <!-- TAB 1: ITINERARY CONTENT -->
+        <section id="tab-itinerary" class="space-y-4">
+            
+            <!-- Resort Accommodation Feature Banner & Comparison Advice -->
+            <div class="relative rounded-2xl overflow-hidden shadow-md border border-slate-200 bg-slate-900 group">
+                <img src="images/okinawa_resort_view.png" alt="恩納村・読谷村 オーシャンフロントリゾート" class="w-full h-44 sm:h-56 object-cover opacity-85 group-hover:scale-105 transition-transform duration-500">
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/30 to-transparent flex flex-col justify-end p-4 sm:p-5 text-white">
+                    <div class="inline-flex items-center gap-1.5 bg-ocean-600 text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full w-fit mb-1 backdrop-blur-xs">
+                        <i class="fa-solid fa-star"></i> 宿泊拠点・恩納村/読谷村エリア 2泊連泊
+                    </div>
+                    <h3 class="text-lg sm:text-xl font-bold">ビーチ直結 リゾートホテル連泊（効率＆リゾート感最高）</h3>
+                    <p class="text-xs text-slate-200 mt-0.5 flex items-center gap-3">
+                        <span><i class="fa-solid fa-location-dot text-rose-400"></i> 沖縄県国頭郡恩納村 / 読谷村</span>
+                        <span><i class="fa-solid fa-umbrella-beach text-sky-400"></i> オンザビーチ・プール完備</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Hotel & Area Comparison Advice Box (Crowd Avoidance Guide) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-xs text-amber-900 space-y-3 reveal-on-scroll">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2 font-bold text-amber-900 text-sm">
+                        <i class="fa-solid fa-shield-halved text-amber-600 text-base"></i>
+                        <span>【連休の混雑回避】 おすすめ宿泊エリア＆滞在スタイルの比較ガイド</span>
+                    </div>
+                    <span class="bg-rose-100 text-rose-700 text-[10px] font-bold px-2 py-0.5 rounded border border-rose-200">
+                        9月3連休 渋滞対策
+                    </span>
+                </div>
+
+                <p class="leading-relaxed">
+                    9月連休（敬老の日3連休）は沖縄本島の国道58号線（特に恩納村中心部）や人気観光地が混雑します。**「どこに泊まるか」で移動ストレスが大きく変わる**ため、混雑回避視点でおすすめの3エリアを比較しました。
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5 pt-1">
+                    <!-- Area 1: Yomitan -->
+                    <div class="bg-white p-3 rounded-lg border border-amber-200 shadow-2xs space-y-1.5">
+                        <div class="font-bold text-emerald-800 text-xs flex items-center justify-between">
+                            <span><i class="fa-solid fa-crown text-amber-500 mr-1"></i>1. 読谷村（よみたん）</span>
+                            <span class="bg-emerald-100 text-emerald-800 text-[10px] px-1.5 py-0.5 rounded font-black">混雑回避No.1⭐</span>
+                        </div>
+                        <p class="text-[11px] text-slate-600 leading-normal">
+                            <strong>特徴:</strong> 恩納村のすぐ南隣。国道58号線の慢性的渋滞を回避できる静かなリゾート地。<br>
+                            <strong>魅力:</strong> 天然の透明な「ニライビーチ」や残波岬があり、オンザビーチリゾートが充実。「やちむんの里」や「青の洞窟」も車で10分圏内！<br>
+                            <em class="text-emerald-700">おすすめホテル: ホテル日航アリビラ / 星のや沖縄 / グランディスタイル</em>
+                        </p>
+                    </div>
+
+                    <!-- Area 2: Northern Onna / Kise -->
+                    <div class="bg-white p-3 rounded-lg border border-amber-200 shadow-2xs space-y-1.5">
+                        <div class="font-bold text-sky-800 text-xs flex items-center justify-between">
+                            <span><i class="fa-solid fa-hotel text-sky-600 mr-1"></i>2. 恩納村北部・名護喜瀬</span>
+                            <span class="bg-sky-100 text-sky-800 text-[10px] px-1.5 py-0.5 rounded font-black">高速直結・静寂⭐</span>
+                        </div>
+                        <p class="text-[11px] text-slate-600 leading-normal">
+                            <strong>特徴:</strong> 沖縄自動車道「許田IC」に近く、一般道の渋滞に巻き込まれずに那覇〜美ら海水族館へアクセス可。<br>
+                            <strong>魅力:</strong> 広い敷地とプライベートビーチを持つ最高級リゾートが集積。静かにのんびり過ごしたい方に最適。<br>
+                            <em class="text-sky-700">おすすめホテル: ハレクラニ沖縄 / ザ・ブセナテラス / オリエンタルホテル</em>
+                        </p>
+                    </div>
+
+                    <!-- Area 3: Central Onna -->
+                    <div class="bg-white p-3 rounded-lg border border-amber-200 shadow-2xs space-y-1.5">
+                        <div class="font-bold text-amber-800 text-xs flex items-center justify-between">
+                            <span><i class="fa-solid fa-utensils text-amber-600 mr-1"></i>3. 恩納村中央部</span>
+                            <span class="bg-amber-100 text-amber-800 text-[10px] px-1.5 py-0.5 rounded font-black">賑やか・便利</span>
+                        </div>
+                        <p class="text-[11px] text-slate-600 leading-normal">
+                            <strong>特徴:</strong> 冨着・前兼久エリア。飲食店や民謡居酒屋が多く徒歩圏内で夕食が完結。<br>
+                            <strong>注意点:</strong> 連休中の夕方は国道58号線が混みやすいため、裏道（沖縄自動車道・屋嘉IC）や早めの夕食移動がコツ。<br>
+                            <em class="text-amber-700">おすすめホテル: カフーリゾート / シェラトン沖縄 / ルネッサンス</em>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="pt-1 text-[11px] border-t border-amber-200/80 text-amber-950 font-medium flex items-center gap-2">
+                    <i class="fa-solid fa-circle-check text-emerald-600"></i>
+                    <span><strong>連休混雑対策の裏ワザ:</strong> 美ら海水族館は朝イチ（09:00前）着／夕食予約は1か月以上前に確保／高速道路（許田IC・屋嘉IC）の活用がポイントです！</span>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between pt-1">
+                <h2 class="font-bold text-slate-800 text-base sm:text-lg flex items-center gap-2">
+                    <i class="fa-solid fa-clock text-ocean-600"></i>
+                    2泊3日 詳細タイムスケジュール
+                </h2>
+                <span class="text-xs bg-sky-100 text-sky-800 font-bold px-2.5 py-1 rounded-full border border-sky-200">
+                    <i class="fa-solid fa-car mr-1"></i>レンタカー黄金ドライブ
+                </span>
+            </div>
+
+            <!-- Accordion Days -->
+            <div class="space-y-3">
+
+                <!-- DAY 1 -->
+                <div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-xs">
+                    <div class="bg-gradient-to-r from-sky-600 to-ocean-600 p-3.5 text-white flex items-center justify-between cursor-pointer" onclick="toggleAccordion('day1')">
+                        <div class="flex items-center gap-2.5">
+                            <span class="bg-white text-sky-800 text-xs font-black px-2 py-0.5 rounded">Day 1</span>
+                            <span class="font-bold text-sm sm:text-base">9月19日（土） 到着・残波岬＆読谷村ビーチリゾートチェックイン・あぐー豚ディナー</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-xs transition-transform" id="icon-day1"></i>
+                    </div>
+                    <div id="body-day1" class="p-4 space-y-3 text-xs sm:text-sm bg-white">
+                        <div class="p-2.5 bg-sky-50 border border-sky-200 rounded-lg text-sky-900 text-xs">
+                            <i class="fa-solid fa-circle-info mr-1 text-sky-600"></i> <strong>早朝アクセスポイント:</strong> 船橋(04:30/05:00)または西船橋(04:50/05:10)発のリムジンバスで羽田T2へスムーズアクセス！
+                        </div>
+
+                        <ul class="relative border-l-2 border-sky-300 ml-3 space-y-3.5 pl-4 text-xs">
+                            <li class="relative cursor-pointer hover:bg-slate-50 p-1.5 rounded transition" onclick="scrollToMapAndFocus('funabashi_bus')">
+                                <div class="absolute -left-[23px] top-1 bg-amber-500 text-white w-4 h-4 rounded-full flex items-center justify-center text-[9px]"><i class="fa-solid fa-bus"></i></div>
+                                <div class="font-bold text-slate-800 text-sm">04:30 船橋発 / 04:50 西船橋発 リムジンバス乗車</div>
+                                <p class="text-slate-500">羽田空港第2ターミナル（ANA発着）へ約55分。05:35頃到着。</p>
+                            </li>
+                            <li class="relative cursor-pointer hover:bg-slate-50 p-1.5 rounded transition" onclick="scrollToMapAndFocus('haneda_t2')">
+                                <div class="absolute -left-[23px] top-1 bg-sky-600 text-white w-4 h-4 rounded-full flex items-center justify-center text-[9px]"><i class="fa-solid fa-plane"></i></div>
+                                <div class="font-bold text-slate-800 text-sm">06:10 羽田発 (NH461便) または 06:40発 (NH993便) ➔ 那覇へ</div>
+                                <p class="text-slate-500">09:00 (NH461) / 09:25 (NH993) 那覇空港に定刻到着。手荷物受け取りへ。</p>
+                            </li>
+                            <li class="relative cursor-pointer hover:bg-slate-50 p-1.5 rounded transition" onclick="scrollToMapAndFocus('rental_car')">
+                                <div class="absolute -left-[23px] top-1 bg-indigo-600 text-white w-4 h-4 rounded-full flex items-center justify-center text-[9px]"><i class="fa-solid fa-car"></i></div>
+                                <div class="font-bold text-slate-800 text-sm">09:45 - 10:30 那覇空港送迎バス ➔ レンタカー受取手続き</div>
+                                <p class="text-slate-500">送迎車で店舗へ。手続きを済ませて、国道58号バイパス経由で読谷村へ出発！</p>
+                            </li>
+                            <li class="relative cursor-pointer hover:bg-slate-50 p-1.5 rounded transition" onclick="scrollToMapAndFocus('shuri_soba')">
+                                <div class="absolute -left-[23px] top-1 bg-rose-500 text-white w-4 h-4 rounded-full flex items-center justify-center text-[9px]"><i class="fa-solid fa-utensils"></i></div>
+                                <div class="font-bold text-slate-800 text-sm">11:30 【昼食】首里そば (または 読谷村「番所亭」自家製よもぎ麺沖縄そば)</div>
+                                <div class="flex items-center gap-2 mt-0.5">
+                                    <span class="bg-slate-100 text-slate-600 font-semibold px-1.5 py-0.5 rounded text-[10px]">那覇/読谷</span>
+                                </div>
+                                <p class="text-slate-500 mt-1">手打ち麺と極上スープで早めの昼食。混雑を回避して読谷村へ移動。</p>
+                            </li>
+                            <li class="relative cursor-pointer hover:bg-slate-50 p-1.5 rounded transition" onclick="scrollToMapAndFocus('zanpa')">
+                                <div class="absolute -left-[23px] top-1 bg-teal-600 text-white w-4 h-4 rounded-full flex items-center justify-center text-[9px]"><i class="fa-solid fa-camera font-bold"></i></div>
+                                <div class="font-bold text-slate-800 text-sm">14:00 残波岬（ざんぱみさき）散策＆灯台ビュー</div>
+                                <p class="text-slate-500">読谷村北西端の断崖絶壁。白亜の大型灯台と荒波の壮大なダイナミック景観。</p>
+                            </li>
+                            <li class="relative cursor-pointer hover:bg-slate-50 p-1.5 rounded transition" onclick="scrollToMapAndFocus('yomitan_resort')">
+                                <div class="absolute -left-[23px] top-1 bg-emerald-600 text-white w-4 h-4 rounded-full flex items-center justify-center text-[9px]"><i class="fa-solid fa-hotel"></i></div>
+                                <div class="font-bold text-slate-800 text-sm">15:30 読谷村ビーチリゾート（ホテル日航アリビラ等） チェックイン</div>
+                                <p class="text-slate-500">赤瓦とスペイン風建築が美しいリゾートへ。直結する天然ニライビーチやガーデンプールでひと休み！</p>
+                            </li>
+                            <li class="relative cursor-pointer hover:bg-slate-50 p-1.5 rounded transition" onclick="scrollToMapAndFocus('matsumoto')">
+                                <div class="absolute -left-[23px] top-1 bg-rose-600 text-white w-4 h-4 rounded-full flex items-center justify-center text-[9px]"><i class="fa-solid fa-utensils"></i></div>
+                                <div class="font-bold text-slate-800 text-sm">18:30 【夕食】あぐー豚しゃぶしゃぶ （那覇「まつもと」または 読谷村あぐー専門店）</div>
+                                <div class="flex items-center gap-2 mt-0.5">
+                                    <span class="bg-slate-100 text-slate-600 font-semibold px-1.5 py-0.5 rounded text-[10px]">那覇/読谷</span>
+                                    <span class="bg-amber-100 text-amber-700 font-bold px-1.5 py-0.5 rounded text-[10px]"><i class="fa-solid fa-star mr-0.5"></i>要事前予約</span>
+                                </div>
+                                <p class="text-slate-500 mt-1">極上あぐー豚をシークヮーサーポン酢ともずくでいただく絶品しゃぶしゃぶ。</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- DAY 2 -->
+                <div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-xs">
+                    <div class="bg-gradient-to-r from-ocean-600 to-teal-600 p-3.5 text-white flex items-center justify-between cursor-pointer" onclick="toggleAccordion('day2')">
+                        <div class="flex items-center gap-2.5">
+                            <span class="bg-white text-teal-800 text-xs font-black px-2 py-0.5 rounded">Day 2</span>
+                            <span class="font-bold text-sm sm:text-base">9月20日（日） 【完全混雑回避】 青の洞窟スノーケル (車10分) ➔ ニライビーチ＆プールリラクゼーション</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-xs transition-transform" id="icon-day2"></i>
+                    </div>
+                    <div id="body-day2" class="p-4 space-y-3 text-xs sm:text-sm bg-white">
+                        <div class="p-2.5 bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-900 text-xs">
+                            <i class="fa-solid fa-shield-halved mr-1 text-emerald-600"></i> <strong>完全ノー渋滞・混雑ゼロ最高プラン:</strong> 美ら海水族館（片道1時間半）を回避！車で10分の真栄田岬でアクティビティを済ませ、13時からホテルのビーチ＆プールでゆったりリゾートを満喫！
+                        </div>
+
+                        <ul class="relative border-l-2 border-teal-300 ml-3 space-y-3.5 pl-4 text-xs">
+                            <li class="relative cursor-pointer hover:bg-slate-50 p-1.5 rounded transition" onclick="scrollToMapAndFocus('maeda_cave')">
+                                <div class="absolute -left-[23px] top-1 bg-sky-500 text-white w-4 h-4 rounded-full flex items-center justify-center text-[9px]"><i class="fa-solid fa-water font-bold"></i></div>
+                                <div class="font-bold text-slate-800 text-sm">08:30 - 11:00 【午前メインアクティビティ】 青の洞窟（真栄田岬）ボートスノーケリング</div>
+                                <p class="text-slate-500">読谷のホテルから車で僅か10分！朝一番の少人数ツアーで神秘的な青い光とカラフルな熱帯魚に出会う感動体験。</p>
+                            </li>
+                            <li class="relative cursor-pointer hover:bg-slate-50 p-1.5 rounded transition" onclick="scrollToMapAndFocus('banta_cafe')">
+                                <div class="absolute -left-[23px] top-1 bg-rose-500 text-white w-4 h-4 rounded-full flex items-center justify-center text-[9px]"><i class="fa-solid fa-utensils"></i></div>
+                                <div class="font-bold text-slate-800 text-sm">11:30 - 12:30 【昼食】 星野リゾート バンタカフェ (または 読谷沖縄そば名店「番所亭」)</div>
+                                <div class="flex items-center gap-2 mt-0.5">
+                                    <span class="bg-slate-100 text-slate-600 font-semibold px-1.5 py-0.5 rounded text-[10px]">読谷村海沿い</span>
+                                </div>
+                                <p class="text-slate-500 mt-1">圧倒的スケールの崖の上に建つ絶景カフェで海を眺めながらランチ。移動時間ゼロでホテルへ。</p>
+                            </li>
+                            <li class="relative cursor-pointer hover:bg-slate-50 p-1.5 rounded transition" onclick="scrollToMapAndFocus('yomitan_resort')">
+                                <div class="absolute -left-[23px] top-1 bg-emerald-600 text-white w-4 h-4 rounded-full flex items-center justify-center text-[9px]"><i class="fa-solid fa-water"></i></div>
+                                <div class="font-bold text-slate-800 text-sm">13:00 - 18:00 ⭐ 【読谷リゾート贅沢タイム】 ニライビーチ＆ガーデンプールを最大満喫</div>
+                                <div class="flex items-center gap-2 mt-0.5">
+                                    <span class="bg-emerald-100 text-emerald-800 font-bold px-1.5 py-0.5 rounded text-[10px]"><i class="fa-solid fa-sun mr-0.5"></i>ロングリラクゼーション</span>
+                                </div>
+                                <p class="text-slate-500 mt-1">13時からホテル直結の天然「ニライビーチ」へ！プールサイドでカクテルや読書、サンセット鑑賞まで連休の喧騒とは無縁の優雅な島時間を堪能。</p>
+                            </li>
+                            <li class="relative cursor-pointer hover:bg-slate-50 p-1.5 rounded transition" onclick="scrollToMapAndFocus('ryukyu_gyu')">
+                                <div class="absolute -left-[23px] top-1 bg-rose-600 text-white w-4 h-4 rounded-full flex items-center justify-center text-[9px]"><i class="fa-solid fa-utensils"></i></div>
+                                <div class="font-bold text-slate-800 text-sm">19:00 【夕食】琉球の牛 恩納店（沖縄和牛焼肉） または 読谷村地産地消ディナー</div>
+                                <div class="flex items-center gap-2 mt-0.5">
+                                    <span class="bg-slate-100 text-slate-600 font-semibold px-1.5 py-0.5 rounded text-[10px]">読谷/恩納</span>
+                                    <span class="bg-amber-100 text-amber-700 font-bold px-1.5 py-0.5 rounded text-[10px]"><i class="fa-solid fa-star mr-0.5"></i>要事前予約</span>
+                                </div>
+                                <p class="text-slate-500 mt-1">読谷から車で15分の近さで極上の県産和牛・琉球牛焼肉を満喫。</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- DAY 3 -->
+                <div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-xs">
+                    <div class="bg-gradient-to-r from-indigo-600 to-purple-600 p-3.5 text-white flex items-center justify-between cursor-pointer" onclick="toggleAccordion('day3')">
+                        <div class="flex items-center gap-2.5">
+                            <span class="bg-white text-indigo-800 text-xs font-black px-2 py-0.5 rounded">Day 3</span>
+                            <span class="font-bold text-sm sm:text-base">9月21日（月・祝） 読谷やちむんの里・瀬長島ウミカジテラス＆夜間便で帰路</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-xs transition-transform" id="icon-day3"></i>
+                    </div>
+                    <div id="body-day3" class="p-4 space-y-3 text-xs sm:text-sm bg-white">
+                        <ul class="relative border-l-2 border-indigo-300 ml-3 space-y-3.5 pl-4 text-xs">
+                            <li class="relative cursor-pointer hover:bg-slate-50 p-1.5 rounded transition" onclick="scrollToMapAndFocus('yachimun')">
+                                <div class="absolute -left-[23px] top-1 bg-amber-600 text-white w-4 h-4 rounded-full flex items-center justify-center text-[9px]"><i class="fa-solid fa-store"></i></div>
+                                <div class="font-bold text-slate-800 text-sm">09:30 - 11:30 読谷やちむんの里 散策＆伝統陶芸のお買い物</div>
+                                <p class="text-slate-500">読谷村内の赤瓦登り窯へ。旅の記念にお気に入りのやちむん（沖縄陶器）を購入。</p>
+                            </li>
+                            <li class="relative cursor-pointer hover:bg-slate-50 p-1.5 rounded transition" onclick="scrollToMapAndFocus('yomitan_resort')">
+                                <div class="absolute -left-[23px] top-1 bg-emerald-600 text-white w-4 h-4 rounded-full flex items-center justify-center text-[9px]"><i class="fa-solid fa-hotel"></i></div>
+                                <div class="font-bold text-slate-800 text-sm">11:30 チェックアウト ➔ バイパス経由で那覇方面へドライブ</div>
+                                <p class="text-slate-500">ホテルをチェックアウトし、渋滞のない読谷バイパス〜西海岸道路をドライブ。</p>
+                            </li>
+                            <li class="relative cursor-pointer hover:bg-slate-50 p-1.5 rounded transition" onclick="scrollToMapAndFocus('umikaji')">
+                                <div class="absolute -left-[23px] top-1 bg-teal-500 text-white w-4 h-4 rounded-full flex items-center justify-center text-[9px]"><i class="fa-solid fa-plane-up"></i></div>
+                                <div class="font-bold text-slate-800 text-sm">13:30 【昼食＆散策】瀬長島ウミカジテラス</div>
+                                <div class="flex items-center gap-2 mt-0.5">
+                                    <span class="bg-slate-100 text-slate-600 font-semibold px-1.5 py-0.5 rounded text-[10px]">豊見城市瀬長島</span>
+                                </div>
+                                <p class="text-slate-500 mt-1">真っ白な地中海風テラスで海沿いランチ。目の前の那覇空港滑走路を離発着する巨大飛行機を観賞。</p>
+                            </li>
+                            <li class="relative cursor-pointer hover:bg-slate-50 p-1.5 rounded transition" onclick="scrollToMapAndFocus('rental_car')">
+                                <div class="absolute -left-[23px] top-1 bg-indigo-600 text-white w-4 h-4 rounded-full flex items-center justify-center text-[9px]"><i class="fa-solid fa-car"></i></div>
+                                <div class="font-bold text-slate-800 text-sm">17:30 レンタカー店舗へ返却 ➔ 空港送迎バス</div>
+                                <p class="text-slate-500">ガソリン満タンで返却。空港へ送迎車で移動（約10〜15分）。</p>
+                            </li>
+                            <li class="relative cursor-pointer hover:bg-slate-50 p-1.5 rounded transition" onclick="scrollToMapAndFocus('naha_airport')">
+                                <div class="absolute -left-[23px] top-1 bg-sky-600 text-white w-4 h-4 rounded-full flex items-center justify-center text-[9px]"><i class="fa-solid fa-briefcase"></i></div>
+                                <div class="font-bold text-slate-800 text-sm">18:00 那覇空港でお買い物＆ポークたまごおにぎり・軽食</div>
+                                <p class="text-slate-500">紅芋タルト、ちんすこう、海ぶどう等のお土産購入。「ポーたま那覇空港店」で名物おにぎりを購入。</p>
+                            </li>
+                            <li class="relative cursor-pointer hover:bg-slate-50 p-1.5 rounded transition" onclick="scrollToMapAndFocus('haneda_t2')">
+                                <div class="absolute -left-[23px] top-1 bg-rose-600 text-white w-4 h-4 rounded-full flex items-center justify-center text-[9px]"><i class="fa-solid fa-plane-landing"></i></div>
+                                <div class="font-bold text-slate-800 text-sm">19:40 那覇発 (NH1096便) または 20:05発 (NH1098便) ➔ 羽田着 (22:10 / 22:20)</div>
+                                <p class="text-slate-500">定刻羽田空港着。荷物受け取り後、1階13番乗り場へ。</p>
+                            </li>
+                            <li class="relative cursor-pointer hover:bg-slate-50 p-1.5 rounded transition" onclick="scrollToMapAndFocus('funabashi_bus')">
+                                <div class="absolute -left-[23px] top-1 bg-amber-500 text-white w-4 h-4 rounded-full flex items-center justify-center text-[9px]"><i class="fa-solid fa-bus"></i></div>
+                                <div class="font-bold text-slate-800 text-sm">22:25 / 22:55 羽田空港T2発 リムジンバス ➔ 西船橋・船橋着</div>
+                                <p class="text-slate-500">深夜バスで移動。23:20〜23:50頃、船橋へ安全無事帰宅！</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- TAB 2: GOURMET & SPOTS CONTENT -->
+        <section id="tab-gourmet" class="hidden space-y-4">
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
+                <h2 class="font-bold text-slate-800 text-base sm:text-lg mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-utensils text-rose-500"></i>
+                    沖縄厳選グルメ＆おすすめ観光スポット
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                    
+                    <!-- Spot Card 1 -->
+                    <div class="border border-slate-200 rounded-xl p-3.5 hover:shadow-sm transition bg-slate-50/50">
+                        <div class="flex items-start justify-between">
+                            <span class="bg-rose-100 text-rose-700 font-bold text-[10px] px-2 py-0.5 rounded">あぐー豚しゃぶしゃぶ</span>
+                            <span class="text-xs text-slate-400 font-mono">Day 1 夕食候補</span>
+                        </div>
+                        <h4 class="font-bold text-slate-800 text-sm mt-1">豚しゃぶ 七輪焼 まつもと / 恩納村あぐー専門店</h4>
+                        <p class="text-xs text-slate-600 mt-1">甘みのある脂肪と深いコクが特徴の純血あぐー豚。特製シークヮーサーポン酢とたっぷりの島らっきょう、もずくを潜らせて食べる極上の味わい。</p>
+                        <div class="mt-2.5 flex items-center justify-between text-[11px] pt-2 border-t border-slate-200">
+                            <span class="text-rose-600 font-semibold"><i class="fa-solid fa-location-dot mr-1"></i>那覇松山 / 恩納村</span>
+                            <button onclick="scrollToMapAndFocus('matsumoto')" class="text-sky-600 hover:underline font-bold">マップで見る <i class="fa-solid fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Spot Card 2 -->
+                    <div class="border border-slate-200 rounded-xl p-3.5 hover:shadow-sm transition bg-slate-50/50">
+                        <div class="flex items-start justify-between">
+                            <span class="bg-rose-100 text-rose-700 font-bold text-[10px] px-2 py-0.5 rounded">沖縄和牛焼肉</span>
+                            <span class="text-xs text-slate-400 font-mono">Day 2 夕食候補</span>
+                        </div>
+                        <h4 class="font-bold text-slate-800 text-sm mt-1">琉球の牛 恩納店 / 焼肉 もとぶ牧場</h4>
+                        <p class="text-xs text-slate-600 mt-1">沖縄最高峰のブランド和牛「琉球牛」や「本部牛」。口の中でとろけるサーロインや上カルビ、パイナップル豚などが味わえるリゾート感満載の焼肉。</p>
+                        <div class="mt-2.5 flex items-center justify-between text-[11px] pt-2 border-t border-slate-200">
+                            <span class="text-rose-600 font-semibold"><i class="fa-solid fa-location-dot mr-1"></i>恩納村前兼久</span>
+                            <button onclick="scrollToMapAndFocus('ryukyu_gyu')" class="text-sky-600 hover:underline font-bold">マップで見る <i class="fa-solid fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Spot Card 3 -->
+                    <div class="border border-slate-200 rounded-xl p-3.5 hover:shadow-sm transition bg-slate-50/50">
+                        <div class="flex items-start justify-between">
+                            <span class="bg-amber-100 text-amber-800 font-bold text-[10px] px-2 py-0.5 rounded">絶景カフェピザ</span>
+                            <span class="text-xs text-slate-400 font-mono">Day 2 昼食</span>
+                        </div>
+                        <h4 class="font-bold text-slate-800 text-sm mt-1">ピザ喫茶 花人逢（かじんほう）</h4>
+                        <p class="text-xs text-slate-600 mt-1">本部町の山頂に建つ古民家カフェ。縁側から東シナ海と伊江島を一望しながら、もちもち手打ち生地の特製焼きたてピザと湧水マンゴージュースを楽しむ。</p>
+                        <div class="mt-2.5 flex items-center justify-between text-[11px] pt-2 border-t border-slate-200">
+                            <span class="text-amber-600 font-semibold"><i class="fa-solid fa-location-dot mr-1"></i>本部町山里</span>
+                            <button onclick="scrollToMapAndFocus('kajinhou')" class="text-sky-600 hover:underline font-bold">マップで見る <i class="fa-solid fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Spot Card 4 -->
+                    <div class="border border-slate-200 rounded-xl p-3.5 hover:shadow-sm transition bg-slate-50/50">
+                        <div class="flex items-start justify-between">
+                            <span class="bg-sky-100 text-sky-700 font-bold text-[10px] px-2 py-0.5 rounded">絶景スポット</span>
+                            <span class="text-xs text-slate-400 font-mono">Day 2 午後</span>
+                        </div>
+                        <h4 class="font-bold text-slate-800 text-sm mt-1">古宇利大橋＆ティーヌ浜（ハートロック）</h4>
+                        <p class="text-xs text-slate-600 mt-1">エメラルドグリーンの海を渡る全長約2kmの海中道路のような橋。島北側のティーヌ浜にあるハート型の波蝕岩はCMでも話題のロマンチックスポット。</p>
+                        <div class="mt-2.5 flex items-center justify-between text-[11px] pt-2 border-t border-slate-200">
+                            <span class="text-sky-600 font-semibold"><i class="fa-solid fa-location-dot mr-1"></i>今帰仁村古宇利</span>
+                            <button onclick="scrollToMapAndFocus('kouri_bridge')" class="text-sky-600 hover:underline font-bold">マップで見る <i class="fa-solid fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Spot Card 5 -->
+                    <div class="border border-slate-200 rounded-xl p-3.5 hover:shadow-sm transition bg-slate-50/50">
+                        <div class="flex items-start justify-between">
+                            <span class="bg-teal-100 text-teal-700 font-bold text-[10px] px-2 py-0.5 rounded">海沿いウミカジ</span>
+                            <span class="text-xs text-slate-400 font-mono">Day 3 昼食</span>
+                        </div>
+                        <h4 class="font-bold text-slate-800 text-sm mt-1">瀬長島ウミカジテラス</h4>
+                        <p class="text-xs text-slate-600 mt-1">那覇空港隣の瀬長島にある地中海風リゾート施設。真っ白な階段テラスにハンバーガー、かき氷、タコライス店が並び、目の前を低空飛行する航空機は圧巻！</p>
+                        <div class="mt-2.5 flex items-center justify-between text-[11px] pt-2 border-t border-slate-200">
+                            <span class="text-teal-600 font-semibold"><i class="fa-solid fa-location-dot mr-1"></i>豊見城市瀬長島</span>
+                            <button onclick="scrollToMapAndFocus('umikaji')" class="text-sky-600 hover:underline font-bold">マップで見る <i class="fa-solid fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Spot Card 6 -->
+                    <div class="border border-slate-200 rounded-xl p-3.5 hover:shadow-sm transition bg-slate-50/50">
+                        <div class="flex items-start justify-between">
+                            <span class="bg-indigo-100 text-indigo-700 font-bold text-[10px] px-2 py-0.5 rounded">沖縄伝統工芸</span>
+                            <span class="text-xs text-slate-400 font-mono">Day 3 買い物</span>
+                        </div>
+                        <h4 class="font-bold text-slate-800 text-sm mt-1">読谷やちむんの里</h4>
+                        <p class="text-xs text-slate-600 mt-1">赤瓦の登り窯が印象的な伝統陶芸の村。独立した工房やショップが点在し、温かみのある沖縄の焼き物（やちむん）を旅の記念やお土産に購入できる。</p>
+                        <div class="mt-2.5 flex items-center justify-between text-[11px] pt-2 border-t border-slate-200">
+                            <span class="text-indigo-600 font-semibold"><i class="fa-solid fa-location-dot mr-1"></i>読谷村座喜味</span>
+                            <button onclick="scrollToMapAndFocus('yachimun')" class="text-sky-600 hover:underline font-bold">マップで見る <i class="fa-solid fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: ACCESS & BUS TIMETABLE CONTENT -->
+        <section id="tab-access" class="hidden space-y-4">
+            <!-- Funabashi Bus Timetable Card -->
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs space-y-3">
+                <div class="flex items-center justify-between">
+                    <h3 class="font-bold text-slate-800 text-sm sm:text-base flex items-center gap-2">
+                        <i class="fa-solid fa-bus text-amber-500"></i>
+                        自宅（船橋） ⇔ 羽田空港 京急・京成リムジンバスガイド
+                    </h3>
+                    <span class="text-[11px] bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded">大人片道 1,400円</span>
+                </div>
+                <p class="text-xs text-slate-600">
+                    京浜急行バス・京成バス共同運行の空港連絡バスです。スーツケースをトランクに預けて乗り換えなしで羽田空港へ快適アクセス可能です。
+                </p>
+
+                <!-- Timetable Table -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs pt-1">
+                    <!-- Outbound Table -->
+                    <div class="border border-sky-200 rounded-lg p-3 bg-sky-50/50">
+                        <h4 class="font-bold text-sky-900 border-b border-sky-200 pb-1.5 mb-2 flex items-center justify-between">
+                            <span><i class="fa-solid fa-plane-departure text-sky-600 mr-1"></i>往路: 船橋 ➔ 羽田空港ゆき</span>
+                            <span class="text-[10px] text-sky-700">所要時間: 約55分</span>
+                        </h4>
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="text-[11px] text-slate-500 border-b border-sky-200">
+                                    <th class="pb-1">船橋駅南口</th>
+                                    <th class="pb-1">西船橋駅北口</th>
+                                    <th class="pb-1 text-right">羽田T2着</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-sky-100 font-mono text-[11px]">
+                                <tr class="bg-amber-100/60 font-bold text-amber-900">
+                                    <td class="py-1">04:30発</td>
+                                    <td class="py-1">04:50発</td>
+                                    <td class="py-1 text-right">05:35着 (NH461用⭐)</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-1">05:00発</td>
+                                    <td class="py-1">05:10発</td>
+                                    <td class="py-1 text-right">06:05着 (NH993用⭐)</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-1">05:30発</td>
+                                    <td class="py-1">05:40発</td>
+                                    <td class="py-1 text-right">06:35着</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-1">06:00発</td>
+                                    <td class="py-1">06:10発</td>
+                                    <td class="py-1 text-right">07:05着</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p class="text-[10px] text-slate-500 mt-2">※乗り場: 船橋駅南口2番 / 西船橋駅北口7番。事前Web予約または交通系IC・タッチ決済利用可能。</p>
+                    </div>
+
+                    <!-- Inbound Table -->
+                    <div class="border border-rose-200 rounded-lg p-3 bg-rose-50/50">
+                        <h4 class="font-bold text-rose-900 border-b border-rose-200 pb-1.5 mb-2 flex items-center justify-between">
+                            <span><i class="fa-solid fa-plane-arrival text-rose-600 mr-1"></i>復路: 羽田空港 ➔ 船橋ゆき</span>
+                            <span class="text-[10px] text-rose-700">所要時間: 約55〜70分</span>
+                        </h4>
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="text-[11px] text-slate-500 border-b border-rose-200">
+                                    <th class="pb-1">羽田T2発</th>
+                                    <th class="pb-1">西船橋駅着</th>
+                                    <th class="pb-1 text-right">船橋駅着</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-rose-100 font-mono text-[11px]">
+                                <tr class="bg-amber-100/60 font-bold text-amber-900">
+                                    <td class="py-1">22:25発</td>
+                                    <td class="py-1">23:20着</td>
+                                    <td class="py-1 text-right">23:35着 (NH1096用⭐)</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-1">22:55発</td>
+                                    <td class="py-1">23:50着</td>
+                                    <td class="py-1 text-right">00:05着 (NH1098用⭐)</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-1">23:25発(最終)</td>
+                                    <td class="py-1">00:20着</td>
+                                    <td class="py-1 text-right">00:35着</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p class="text-[10px] text-slate-500 mt-2">※乗り場: 羽田空港第2ターミナル 1階13番乗り場。自動券売機で先払い乗車券をお求めください。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Flight & Car Advice -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                <div class="bg-white p-3.5 rounded-xl border border-slate-200 space-y-2">
+                    <h4 class="font-bold text-slate-800 text-sm flex items-center gap-1.5 text-sky-700">
+                        <i class="fa-solid fa-plane"></i> 航空便（ANA便）ポイント
+                    </h4>
+                    <ul class="space-y-1.5 text-slate-600 list-disc list-inside text-[11px]">
+                        <li><strong>羽田第2ターミナル(T2)</strong>からの出発となります。</li>
+                        <li>保安検査場は出発20分前（NH461便は05:50）までに通過が必要です。</li>
+                        <li>那覇空港到着後は手荷物をスムーズに受け取り送迎バス乗り場へ。</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-3.5 rounded-xl border border-slate-200 space-y-2">
+                    <h4 class="font-bold text-slate-800 text-sm flex items-center gap-1.5 text-emerald-700">
+                        <i class="fa-solid fa-car"></i> 沖縄レンタカー運用のコツ
+                    </h4>
+                    <ul class="space-y-1.5 text-slate-600 list-disc list-inside text-[11px]">
+                        <li>那覇空港到着ロビーを出て道路向かいの<strong>11-A等送迎エリア</strong>へ。</li>
+                        <li>店舗受取まで30〜45分程度バッファを想定。</li>
+                        <li>高速料金はETCカードをご持参いただくとスムーズです。</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 4: CHECKLIST CONTENT -->
+        <section id="tab-checklist" class="hidden space-y-4">
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs space-y-3">
+                <div class="flex items-center justify-between">
+                    <h3 class="font-bold text-slate-800 text-sm sm:text-base flex items-center gap-2">
+                        <i class="fa-solid fa-list-check text-ocean-600"></i>
+                        沖縄旅行 持ち物・準備チェックリスト
+                    </h3>
+                    <div class="flex items-center gap-2">
+                        <span id="checklist-progress" class="text-xs bg-ocean-100 text-ocean-800 font-bold px-2.5 py-0.5 rounded-full">
+                            0 / 0 完了
+                        </span>
+                        <button onclick="resetChecklist()" class="text-[10px] text-slate-400 hover:text-rose-500 underline">リセット</button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1 text-xs">
+                    <!-- Category 1 -->
+                    <div class="space-y-2">
+                        <h4 class="font-bold text-slate-700 text-xs border-b border-slate-200 pb-1 flex items-center gap-1.5">
+                            <i class="fa-solid fa-passport text-rose-500"></i> 貴重品・各種予約
+                        </h4>
+                        <label class="flex items-center gap-2 p-1.5 hover:bg-slate-50 rounded cursor-pointer">
+                            <input type="checkbox" onchange="updateChecklistProgress()" class="chk-item rounded text-ocean-600 focus:ring-ocean-500 w-4 h-4">
+                            <span>運転免許証（レンタカー運転必須）</span>
+                        </label>
+                        <label class="flex items-center gap-2 p-1.5 hover:bg-slate-50 rounded cursor-pointer">
+                            <input type="checkbox" onchange="updateChecklistProgress()" class="chk-item rounded text-ocean-600 focus:ring-ocean-500 w-4 h-4">
+                            <span>航空券（ANA eチケットお客様控え / QRコード）</span>
+                        </label>
+                        <label class="flex items-center gap-2 p-1.5 hover:bg-slate-50 rounded cursor-pointer">
+                            <input type="checkbox" onchange="updateChecklistProgress()" class="chk-item rounded text-ocean-600 focus:ring-ocean-500 w-4 h-4">
+                            <span>クレジットカード・ETCカード</span>
+                        </label>
+                        <label class="flex items-center gap-2 p-1.5 hover:bg-slate-50 rounded cursor-pointer">
+                            <input type="checkbox" onchange="updateChecklistProgress()" class="chk-item rounded text-ocean-600 focus:ring-ocean-500 w-4 h-4">
+                            <span>ホテル・レンタカー・アクティビティ予約バウチャー</span>
+                        </label>
+                    </div>
+
+                    <!-- Category 2 -->
+                    <div class="space-y-2">
+                        <h4 class="font-bold text-slate-700 text-xs border-b border-slate-200 pb-1 flex items-center gap-1.5">
+                            <i class="fa-solid fa-shirt text-sky-500"></i> 服装・海グッズ
+                        </h4>
+                        <label class="flex items-center gap-2 p-1.5 hover:bg-slate-50 rounded cursor-pointer">
+                            <input type="checkbox" onchange="updateChecklistProgress()" class="chk-item rounded text-ocean-600 focus:ring-ocean-500 w-4 h-4">
+                            <span>水着・ラッシュガード・マリングッズ</span>
+                        </label>
+                        <label class="flex items-center gap-2 p-1.5 hover:bg-slate-50 rounded cursor-pointer">
+                            <input type="checkbox" onchange="updateChecklistProgress()" class="chk-item rounded text-ocean-600 focus:ring-ocean-500 w-4 h-4">
+                            <span>サングラス・日焼け止め（サンゴに優しいタイプ）</span>
+                        </label>
+                        <label class="flex items-center gap-2 p-1.5 hover:bg-slate-50 rounded cursor-pointer">
+                            <input type="checkbox" onchange="updateChecklistProgress()" class="chk-item rounded text-ocean-600 focus:ring-ocean-500 w-4 h-4">
+                            <span>ビーチサンダル・マリンシューズ</span>
+                        </label>
+                        <label class="flex items-center gap-2 p-1.5 hover:bg-slate-50 rounded cursor-pointer">
+                            <input type="checkbox" onchange="updateChecklistProgress()" class="chk-item rounded text-ocean-600 focus:ring-ocean-500 w-4 h-4">
+                            <span>羽織もの（クーラー対策の薄手カーディガン等）</span>
+                        </label>
+                    </div>
+
+                    <!-- Category 3 -->
+                    <div class="space-y-2">
+                        <h4 class="font-bold text-slate-700 text-xs border-b border-slate-200 pb-1 flex items-center gap-1.5">
+                            <i class="fa-solid fa-mobile-screen text-amber-500"></i> ガジェット・便利グッズ
+                        </h4>
+                        <label class="flex items-center gap-2 p-1.5 hover:bg-slate-50 rounded cursor-pointer">
+                            <input type="checkbox" onchange="updateChecklistProgress()" class="chk-item rounded text-ocean-600 focus:ring-ocean-500 w-4 h-4">
+                            <span>スマートフォン＆充電器・モバイルバッテリー</span>
+                        </label>
+                        <label class="flex items-center gap-2 p-1.5 hover:bg-slate-50 rounded cursor-pointer">
+                            <input type="checkbox" onchange="updateChecklistProgress()" class="chk-item rounded text-ocean-600 focus:ring-ocean-500 w-4 h-4">
+                            <span>防水スマホケース（水中写真用）</span>
+                        </label>
+                        <label class="flex items-center gap-2 p-1.5 hover:bg-slate-50 rounded cursor-pointer">
+                            <input type="checkbox" onchange="updateChecklistProgress()" class="chk-item rounded text-ocean-600 focus:ring-ocean-500 w-4 h-4">
+                            <span>常備薬・酔い止め・虫除けスプレー</span>
+                        </label>
+                    </div>
+
+                    <!-- Category 4 -->
+                    <div class="space-y-2">
+                        <h4 class="font-bold text-slate-700 text-xs border-b border-slate-200 pb-1 flex items-center gap-1.5">
+                            <i class="fa-solid fa-car text-emerald-500"></i> ドライブ・買い物準備
+                        </h4>
+                        <label class="flex items-center gap-2 p-1.5 hover:bg-slate-50 rounded cursor-pointer">
+                            <input type="checkbox" onchange="updateChecklistProgress()" class="chk-item rounded text-ocean-600 focus:ring-ocean-500 w-4 h-4">
+                            <span>エコバッグ・ビニール袋（濡れた服入れ）</span>
+                        </label>
+                        <label class="flex items-center gap-2 p-1.5 hover:bg-slate-50 rounded cursor-pointer">
+                            <input type="checkbox" onchange="updateChecklistProgress()" class="chk-item rounded text-ocean-600 focus:ring-ocean-500 w-4 h-4">
+                            <span>車内用スマホホルダー・シガーソケット充電器</span>
+                        </label>
+                        <label class="flex items-center gap-2 p-1.5 hover:bg-slate-50 rounded cursor-pointer">
+                            <input type="checkbox" onchange="updateChecklistProgress()" class="chk-item rounded text-ocean-600 focus:ring-ocean-500 w-4 h-4">
+                            <span>小銭・現金（駐車場や個人商店用）</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MAP SECTION -->
+        <section id="map-section" class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs space-y-3 reveal-on-scroll">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                    <h2 class="font-bold text-slate-800 text-base flex items-center gap-2">
+                        <i class="fa-solid fa-map-location-dot text-ocean-600"></i>
+                        沖縄本島 インタラクティブマップ＆ドライブコース
+                    </h2>
+                    <p class="text-xs text-slate-500">ピンをクリックで詳細表示。日別ボタンでルートをプレビューできます。</p>
+                </div>
+                <!-- Map Filter Buttons -->
+                <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-lg text-xs font-semibold shrink-0">
+                    <button onclick="filterMap('all')" id="btn-map-all" class="map-filter-btn px-2.5 py-1 rounded bg-white text-slate-800 shadow-xs">すべて</button>
+                    <button onclick="filterMap(1)" id="btn-map-1" class="map-filter-btn px-2.5 py-1 rounded text-slate-600">Day 1</button>
+                    <button onclick="filterMap(2)" id="btn-map-2" class="map-filter-btn px-2.5 py-1 rounded text-slate-600">Day 2</button>
+                    <button onclick="filterMap(3)" id="btn-map-3" class="map-filter-btn px-2.5 py-1 rounded text-slate-600">Day 3</button>
+                </div>
+            </div>
+
+            <!-- Leaflet Container -->
+            <div class="h-80 sm:h-96 w-full rounded-xl overflow-hidden relative border border-slate-200">
+                <div id="map"></div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-6 border-t border-slate-800 mt-8">
+        <div class="max-w-5xl mx-auto px-4 text-center space-y-2">
+            <p class="font-semibold text-slate-300">🌺 沖縄本島 旅のしおり 2026（2泊3日 リゾートドライブ）</p>
+            <p class="text-[11px] text-slate-500">※航空券・ホテル・レンタカーの予約状況によりスケジュールは調整可能です。</p>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // --- 1. Countdown Timer ---
+        function updateCountdown() {
+            const targetDate = new Date('2026-09-19T06:10:00+09:00').getTime();
+            const now = new Date().getTime();
+            const diff = targetDate - now;
+
+            const el = document.getElementById('countdown-timer');
+            if (!el) return;
+
+            if (diff <= 0) {
+                el.innerHTML = "沖縄旅行スタート！🌴";
+                return;
+            }
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const secs = Math.floor((diff % (1000 * 60)) / 1000);
+
+            el.innerHTML = `${days}日 ${hours}時間 ${mins}分 ${secs}秒`;
+        }
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // --- 2. Tab Switcher ---
+        function switchTab(tabName) {
+            const tabs = ['itinerary', 'gourmet', 'access', 'checklist'];
+            tabs.forEach(t => {
+                const sec = document.getElementById('tab-' + t);
+                const btn = document.getElementById('tab-btn-' + t);
+                if (sec) {
+                    if (t === tabName) {
+                        sec.classList.remove('hidden');
+                        sec.classList.add('animate-fade-in');
+                    } else {
+                        sec.classList.add('hidden');
+                    }
+                }
+                if (btn) {
+                    if (t === tabName) {
+                        btn.classList.add('active');
+                        btn.classList.remove('text-slate-600');
+                    } else {
+                        btn.classList.remove('active');
+                        btn.classList.add('text-slate-600');
+                    }
+                }
+            });
+        }
+
+        // --- 3. Accordion Toggle ---
+        function toggleAccordion(dayId) {
+            const body = document.getElementById('body-' + dayId);
+            const icon = document.getElementById('icon-' + dayId);
+            if (!body || !icon) return;
+
+            if (body.classList.contains('hidden')) {
+                body.classList.remove('hidden');
+                body.classList.add('animate-fade-in');
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                body.classList.add('hidden');
+                icon.style.transform = 'rotate(-90deg)';
+            }
+        }
+
+        // --- 4. Weather Forecast (Open-Meteo API) ---
+        const WEATHER_DAYS = [
+            { day: 1, date: '2026-09-19' },
+            { day: 2, date: '2026-09-20' },
+            { day: 3, date: '2026-09-21' }
+        ];
+
+        const WEATHER_CODE_MAP = {
+            0: { icon: 'fa-sun', label: '快晴' },
+            1: { icon: 'fa-sun', label: '晴れ' },
+            2: { icon: 'fa-cloud-sun', label: '晴れ' },
+            3: { icon: 'fa-cloud', label: '曇り' },
+            45: { icon: 'fa-smog', label: '霧' },
+            61: { icon: 'fa-cloud-rain', label: '雨' },
+            80: { icon: 'fa-cloud-rain', label: 'にわか雨' },
+            95: { icon: 'fa-bolt', label: '雷雨' }
+        };
+
+        function showWeatherFallback(day) {
+            const tile = document.getElementById('weather-day-' + day);
+            if (!tile) return;
+            tile.innerHTML = tile.querySelector('.font-bold').outerHTML + `
+                <div class="text-xl my-1 text-amber-300"><i class="fa-solid fa-sun"></i></div>
+                <div class="text-[10px] text-sky-100">30°C / 25°C<br>(9月平均)</div>`;
+        }
+
+        async function loadWeatherForecast() {
+            const updatedEl = document.getElementById('weather-updated');
+            try {
+                const url = 'https://api.open-meteo.com/v1/forecast?latitude=26.2124&longitude=127.6809'
+                    + '&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_probability_max'
+                    + '&timezone=Asia%2FTokyo&start_date=2026-09-19&end_date=2026-09-21';
+                const res = await fetch(url);
+                if (!res.ok) throw new Error('forecast request failed');
+                const data = await res.json();
+                const times = (data.daily && data.daily.time) || [];
+
+                WEATHER_DAYS.forEach(({ day, date }) => {
+                    const idx = times.indexOf(date);
+                    const tile = document.getElementById('weather-day-' + day);
+                    if (!tile) return;
+
+                    if (idx === -1 || data.daily.temperature_2m_max[idx] == null) {
+                        showWeatherFallback(day);
+                        return;
+                    }
+
+                    const code = data.daily.weathercode[idx];
+                    const info = WEATHER_CODE_MAP[code] || { icon: 'fa-cloud-sun', label: '-' };
+                    const max = Math.round(data.daily.temperature_2m_max[idx]);
+                    const min = Math.round(data.daily.temperature_2m_min[idx]);
+                    const pop = data.daily.precipitation_probability_max[idx] || 0;
+
+                    const dateLabel = tile.querySelector('.font-bold').outerHTML;
+                    tile.innerHTML = dateLabel + `
+                        <div class="text-xl my-1 text-amber-300"><i class="fa-solid ${info.icon}"></i></div>
+                        <div class="text-[10px] text-sky-100">${max}° / ${min}°<br>☔${pop}%</div>`;
+                });
+
+                if (updatedEl) updatedEl.textContent = '最終更新: ' + new Date().toLocaleString('ja-JP');
+            } catch (e) {
+                WEATHER_DAYS.forEach(({ day }) => showWeatherFallback(day));
+                if (updatedEl) updatedEl.textContent = '予報を取得できませんでした（9月平均値を表示中）';
+            }
+        }
+        loadWeatherForecast();
+
+        // --- 5. Scroll Reveal Observer ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
+            loadChecklistState();
+        });
+
+        // --- 6. Interactive Checklist Storage ---
+        function updateChecklistProgress() {
+            const checkboxes = document.querySelectorAll('.chk-item');
+            let checked = 0;
+            const state = [];
+
+            checkboxes.forEach((cb, index) => {
+                if (cb.checked) checked++;
+                state.push(cb.checked);
+            });
+
+            const progressEl = document.getElementById('checklist-progress');
+            if (progressEl) {
+                progressEl.textContent = `${checked} / ${checkboxes.length} 完了`;
+            }
+
+            localStorage.setItem('okinawa_checklist_2026', JSON.stringify(state));
+        }
+
+        function loadChecklistState() {
+            const saved = localStorage.getItem('okinawa_checklist_2026');
+            if (!saved) {
+                updateChecklistProgress();
+                return;
+            }
+            try {
+                const state = JSON.parse(saved);
+                const checkboxes = document.querySelectorAll('.chk-item');
+                checkboxes.forEach((cb, index) => {
+                    if (state[index] != null) {
+                        cb.checked = state[index];
+                    }
+                });
+            } catch (e) {}
+            updateChecklistProgress();
+        }
+
+        function resetChecklist() {
+            const checkboxes = document.querySelectorAll('.chk-item');
+            checkboxes.forEach(cb => cb.checked = false);
+            localStorage.removeItem('okinawa_checklist_2026');
+            updateChecklistProgress();
+        }
+
+        // --- 7. Map Spots Data & Leaflet Initialization ---
+        const spots = {
+            'naha_airport': { name: "那覇空港 (OKA)", lat: 26.2064, lng: 127.6522, color: "#0ea5e9", day: [1, 3], desc: "羽田⇔那覇 ANA便発着拠点" },
+            'rental_car': { name: "那覇空港周辺レンタカー", lat: 26.1950, lng: 127.6580, color: "#4f46e5", day: [1, 3], desc: "那覇空港送迎バス約10分" },
+            'shuri_soba': { name: "首里そば / 番所亭", lat: 26.2185, lng: 127.7170, color: "#f43f5e", day: [1], desc: "Day1 昼食 / 沖縄そば名店" },
+            'zanpa': { name: "残波岬（ざんぱみさき）", lat: 26.4380, lng: 127.7125, color: "#0d9488", day: [1], desc: "Day1 絶景岬・白亜の灯台" },
+            'yomitan_resort': { name: "読谷村リゾート拠点 (ホテル日航アリビラ等)", lat: 26.3985, lng: 127.7265, color: "#059669", day: [1, 2, 3], desc: "2泊連泊 ニライビーチ直結リゾート" },
+            'matsumoto': { name: "あぐー豚しゃぶしゃぶ まつもと / 読谷店", lat: 26.2160, lng: 127.6810, color: "#f43f5e", day: [1], desc: "Day1 夕食 / ブランドあぐー豚しゃぶ" },
+            'maeda_cave': { name: "青の洞窟 (真栄田岬)", lat: 26.4435, lng: 127.7725, color: "#0ea5e9", day: [2], desc: "Day2 08:30〜 / ボートスノーケリング(車10分)" },
+            'banta_cafe': { name: "星野リゾート バンタカフェ", lat: 26.3970, lng: 127.7250, color: "#f59e0b", day: [2], desc: "Day2 読谷村海沿い大パノラマカフェ" },
+            'ryukyu_gyu': { name: "琉球の牛 恩納店", lat: 26.4385, lng: 127.8105, color: "#f43f5e", day: [2], desc: "Day2 夕食 / 県産極上和牛焼肉" },
+            'yachimun': { name: "読谷やちむんの里", lat: 26.4020, lng: 127.7470, color: "#d97706", day: [3], desc: "Day3 午前 / 沖縄伝統陶芸工房" },
+            'umikaji': { name: "瀬長島ウミカジテラス", lat: 26.1755, lng: 127.6415, color: "#0d9488", day: [3], desc: "Day3 昼食＆飛行機鑑賞テラス" }
+        };
+
+        const dayRoutes = {
+            1: ['naha_airport', 'rental_car', 'shuri_soba', 'zanpa', 'yomitan_resort', 'matsumoto', 'yomitan_resort'],
+            2: ['yomitan_resort', 'maeda_cave', 'banta_cafe', 'yomitan_resort', 'ryukyu_gyu', 'yomitan_resort'],
+            3: ['yomitan_resort', 'yachimun', 'umikaji', 'rental_car', 'naha_airport']
+        };
+
+        let map, mapMarkers = {}, routePolyline = null;
+
+        window.onload = function() {
+            // Initialize Leaflet Map centered on Okinawa Main Island
+            map = L.map('map', { scrollWheelZoom: false }).setView([26.45, 127.80], 10);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(map);
+
+            // Add Custom Pin Markers
+            Object.keys(spots).forEach(key => {
+                const s = spots[key];
+                
+                const customIcon = L.divIcon({
+                    className: 'custom-pin',
+                    html: `<div style="background-color: ${s.color}; width: 14px; height: 14px; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3);"></div>`,
+                    iconSize: [14, 14],
+                    iconAnchor: [7, 7]
+                });
+
+                const marker = L.marker([s.lat, s.lng], { icon: customIcon }).addTo(map);
+                marker.bindPopup(`
+                    <div class="custom-popup text-xs">
+                        <strong style="color: ${s.color}; font-size: 13px;">${s.name}</strong>
+                        <p class="text-slate-600 mt-1">${s.desc}</p>
+                    </div>
+                `);
+
+                mapMarkers[key] = marker;
+            });
+        };
+
+        // Filter Map by Day & Draw Animated Route Polyline
+        function filterMap(dayNum) {
+            document.querySelectorAll('.map-filter-btn').forEach(b => {
+                b.classList.remove('bg-white', 'text-slate-800', 'shadow-xs');
+                b.classList.add('text-slate-600');
+            });
+
+            const activeBtn = document.getElementById(dayNum === 'all' ? 'btn-map-all' : `btn-map-${dayNum}`);
+            if (activeBtn) {
+                activeBtn.classList.add('bg-white', 'text-slate-800', 'shadow-xs');
+                activeBtn.classList.remove('text-slate-600');
+            }
+
+            if (routePolyline) {
+                map.removeLayer(routePolyline);
+                routePolyline = null;
+            }
+
+            if (dayNum === 'all') {
+                Object.keys(mapMarkers).forEach(k => map.addLayer(mapMarkers[k]));
+                map.setView([26.45, 127.80], 10);
+            } else {
+                Object.keys(mapMarkers).forEach(k => {
+                    if (spots[k].day.includes(dayNum)) {
+                        map.addLayer(mapMarkers[k]);
+                    } else {
+                        map.removeLayer(mapMarkers[k]);
+                    }
+                });
+
+                const seqKeys = dayRoutes[dayNum];
+                if (seqKeys) {
+                    const latLngs = seqKeys.map(k => [spots[k].lat, spots[k].lng]);
+                    routePolyline = L.polyline(latLngs, {
+                        color: '#0d9488',
+                        weight: 3.5,
+                        dashArray: '8, 12',
+                        opacity: 0.85
+                    }).addTo(map);
+
+                    map.fitBounds(routePolyline.getBounds(), { padding: [30, 30] });
+                }
+            }
+        }
+
+        // Scroll down smoothly to map & focus on target spot
+        function scrollToMapAndFocus(spotKey) {
+            const spot = spots[spotKey];
+            if (!spot || !map) return;
+
+            const mapSec = document.getElementById('map-section');
+            mapSec.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            setTimeout(() => {
+                map.flyTo([spot.lat, spot.lng], 13, { duration: 1 });
+                if (mapMarkers[spotKey]) {
+                    mapMarkers[spotKey].openPopup();
+                }
+            }, 300);
+        }
+    </script>
+</body>
+</html>
