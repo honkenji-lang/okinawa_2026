@@ -265,9 +265,6 @@
             <button onclick="switchTab('checklist')" id="tab-btn-checklist" class="tab-btn shrink-0 px-4 py-2 rounded-lg text-slate-600 hover:text-slate-900 transition-all">
                 <i class="fa-solid fa-list-check mr-1.5"></i>持ち物チェック
             </button>
-            <button onclick="switchTab('cost')" id="tab-btn-cost" class="tab-btn shrink-0 px-4 py-2 rounded-lg text-slate-600 hover:text-slate-900 transition-all">
-                <i class="fa-solid fa-coins mr-1.5"></i>料金比較 (プランA vs B)
-            </button>
             <button onclick="switchTab('comments')" id="tab-btn-comments" class="tab-btn shrink-0 px-4 py-2 rounded-lg text-slate-600 hover:text-slate-900 transition-all">
                 <i class="fa-solid fa-comment-dots mr-1.5"></i>メモ・意見投稿 (GitHub Issue)
             </button>
@@ -838,134 +835,6 @@
             </div>
         </section>
 
-        <!-- TAB 6: COST COMPARISON -->
-        <section id="tab-cost" class="hidden space-y-4">
-            <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs space-y-4">
-                <div class="flex items-center justify-between border-b border-slate-200 pb-3">
-                    <div>
-                        <h3 class="font-bold text-slate-800 text-base sm:text-lg flex items-center gap-2">
-                            <i class="fa-solid fa-scale-balanced text-ocean-600"></i>
-                            旅行費用・プラン比較（JTB vs 自分で手配）
-                        </h3>
-                        <p class="text-xs text-slate-500 mt-0.5">
-                            プランA（JTBパッケージツアー）とプランB（個人手配）の費用内訳およびメリット・デメリットの比較表です。（※2名分の料金目安）
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Comparison Table -->
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse text-xs">
-                        <thead>
-                            <tr class="bg-slate-50 text-slate-600 font-bold border-b border-slate-200">
-                                <th class="p-3">項目</th>
-                                <th class="p-3 bg-teal-50/50 text-teal-900">プランA: JTB（パッケージ）</th>
-                                <th class="p-3 bg-sky-50/50 text-sky-900">プランB: 自分で手配（個別）</th>
-                                <th class="p-3 text-slate-500">備考</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-100">
-                            <tr>
-                                <td class="p-3 font-bold text-slate-700">航空券 + ホテル (2泊)</td>
-                                <td class="p-3 bg-teal-50/30 font-semibold text-teal-850">
-                                    ¥589,800 <span class="text-[10px] text-slate-400 font-normal">(2名分)</span>
-                                    <div class="text-[10px] text-teal-700 mt-1 font-normal"><i class="fa-solid fa-circle-info mr-0.5"></i>①朝食付き ②利用券¥7,000x2付き</div>
-                                    <div class="text-[9px] text-slate-400 font-normal mt-0.5">琉球ホテル＆リゾート 名城ビーチ連泊</div>
-                                </td>
-                                <td class="p-3 bg-sky-50/30 font-semibold text-sky-850">
-                                    ¥507,546 <span class="text-[10px] text-slate-400 font-normal">(2名分)</span>
-                                    <div class="text-[10px] text-sky-700 mt-1 font-normal">
-                                        <div><i class="fa-solid fa-plane mr-0.5"></i>飛行機: ¥386,280 <span class="text-[9px] text-slate-400">(¥228,120 + ¥158,160)</span></div>
-                                        <div><i class="fa-solid fa-hotel mr-0.5"></i>ホテル: ¥121,266 <span class="text-[9px] text-slate-400">(琉球ホテル名城ビーチ)</span></div>
-                                        <div class="text-teal-600 font-semibold mt-0.5"><i class="fa-solid fa-circle-check mr-0.5"></i>朝食付き</div>
-                                    </div>
-                                </td>
-                                <td class="p-3 text-slate-500">
-                                    プランA: JTBパッケージ一括<br>
-                                    プランB: 航空券・ホテルを個別手配
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="p-3 font-bold text-slate-700">レンタカー (3日間)</td>
-                                <td class="p-3 bg-teal-50/30 font-semibold text-teal-850">¥22,000 <span class="text-[10px] text-slate-400 font-normal">(免責補償込)</span></td>
-                                <td class="p-3 bg-sky-50/30 font-semibold text-sky-850">¥22,000 <span class="text-[10px] text-slate-400 font-normal">(免責補償込)</span></td>
-                                <td class="p-3 text-slate-500">各自での手配（免責補償込み）</td>
-                            </tr>
-                            <tr class="bg-slate-50/80 font-bold border-t-2 border-slate-200">
-                                <td class="p-3 text-slate-800 text-sm">合計 (2名)</td>
-                                <td class="p-3 bg-teal-100/50 text-teal-900 text-sm">¥611,800 <span class="text-[10px] text-teal-700 font-normal">(30.59万円/人)</span></td>
-                                <td class="p-3 bg-sky-100/50 text-sky-900 text-sm">¥529,546 <span class="text-[10px] text-sky-700 font-normal">(26.4773万円/人)</span></td>
-                                <td class="p-3 text-slate-800 text-sm">差額: プランBが約¥82,254お得</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Pros & Cons Cards -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-                    <!-- JTB Card -->
-                    <div class="border border-teal-200 rounded-xl p-4 bg-teal-50/10 space-y-2">
-                        <div class="flex items-center gap-2 text-teal-900 font-bold text-sm">
-                            <i class="fa-solid fa-suitcase text-teal-650"></i>
-                            <span>プランA: JTB（パッケージツアー）</span>
-                        </div>
-                        <ul class="space-y-1.5 text-[11px] text-slate-650">
-                            <li class="flex items-start gap-1">
-                                <span class="text-emerald-600 font-bold">◯</span>
-                                <span><strong>サポート力抜群:</strong> 台風や悪天候による運休時、振替や返金手続きが一括でサポートされます。</span>
-                            </li>
-                            <li class="flex items-start gap-1">
-                                <span class="text-emerald-600 font-bold">◯</span>
-                                <span><strong>手配が楽:</strong> 宿・フライト・レンタカーがすべて一括予約でき、しおりの管理も簡単。</span>
-                            </li>
-                            <li class="flex items-start gap-1">
-                                <span class="text-emerald-600 font-bold">◯</span>
-                                <span><strong>特典付き:</strong> 現地でのJTBラウンジ利用や、特定アトラクションの優待券が付く場合あり。</span>
-                            </li>
-                            <li class="flex items-start gap-1">
-                                <span class="text-rose-600 font-bold">▲</span>
-                                <span><strong>価格:</strong> 個別手配に比べて手数料等が含まれるため、全体的にやや割高。</span>
-                            </li>
-                            <li class="flex items-start gap-1">
-                                <span class="text-rose-600 font-bold">▲</span>
-                                <span><strong>融通性:</strong> 航空便の事前座席指定に制限がある場合や、選択できる部屋タイプが限られる。</span>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <!-- Individual Card -->
-                    <div class="border border-sky-200 rounded-xl p-4 bg-sky-50/10 space-y-2">
-                        <div class="flex items-center gap-2 text-sky-900 font-bold text-sm">
-                            <i class="fa-solid fa-user-gear text-sky-650"></i>
-                            <span>プランB: 自分で手配（個別手配）</span>
-                        </div>
-                        <ul class="space-y-1.5 text-[11px] text-slate-650">
-                            <li class="flex items-start gap-1">
-                                <span class="text-emerald-600 font-bold">◯</span>
-                                <span><strong>高いコストパフォーマンス:</strong> パッケージ手数料がなく、セールや早期割引の組み合わせで最安に。</span>
-                            </li>
-                            <li class="flex items-start gap-1">
-                                <span class="text-emerald-600 font-bold">◯</span>
-                                <span><strong>完全自由な選択:</strong> 便、シート（前列や非常口付近等）、ホテルの具体的な部屋を1つずつ指定可能。</span>
-                            </li>
-                            <li class="flex items-start gap-1">
-                                <span class="text-emerald-600 font-bold">◯</span>
-                                <span><strong>マイル使用可:</strong> ANAマイルを航空券に充当できるため、実質費用をさらに抑えることも可能。</span>
-                            </li>
-                            <li class="flex items-start gap-1">
-                                <span class="text-rose-600 font-bold">▲</span>
-                                <span><strong>自己責任:</strong> 台風などでの欠航時、ホテル・レンタカー・飛行機それぞれに自分で連絡してキャンセル・振替が必要。</span>
-                            </li>
-                            <li class="flex items-start gap-1">
-                                <span class="text-rose-600 font-bold">▲</span>
-                                <span><strong>管理の手間:</strong> 複数の予約確認書（メールやアプリ）を個別に管理する必要がある。</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </section>
-
         <!-- TAB 5: COMMENTS & GITHUB ISSUE SUBMISSION -->
         <section id="tab-comments" class="hidden space-y-4">
             <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs space-y-4">
@@ -1097,7 +966,7 @@
 
         // --- 2. Tab Switcher ---
         function switchTab(tabName) {
-            const tabs = ['itinerary', 'gourmet', 'access', 'checklist', 'comments', 'cost'];
+            const tabs = ['itinerary', 'gourmet', 'access', 'checklist', 'comments'];
             tabs.forEach(t => {
                 const sec = document.getElementById('tab-' + t);
                 const btn = document.getElementById('tab-btn-' + t);
