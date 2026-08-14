@@ -415,7 +415,13 @@
                             <li class="relative cursor-pointer hover:bg-slate-50 p-1.5 rounded transition" onclick="scrollToMapAndFocus('yomitan_resort')">
                                 <div class="absolute -left-[23px] top-1 bg-emerald-600 text-white w-4 h-4 rounded-full flex items-center justify-center text-[9px]"><i class="fa-solid fa-hotel"></i></div>
                                 <div class="font-bold text-slate-800 text-sm">16:00 琉球ホテル＆リゾート 名城ビーチ チェックイン</div>
-                                <p class="text-slate-500">読谷村から糸満市のホテルへドライブ移動（約50分）。天然ビーチ直結リゾートでゆったり贅沢な島時間を。</p>
+                                <div class="p-2 bg-amber-50 border border-amber-200 rounded-lg text-amber-900 text-[11px] mt-1.5 flex items-start gap-1.5 cursor-pointer hover:bg-amber-100 transition" onclick="event.stopPropagation(); scrollToMapAndFocus('maxvalu')">
+                                    <i class="fa-solid fa-triangle-exclamation text-amber-600 mt-0.5"></i>
+                                    <div>
+                                        <strong>【買い出しメモ】</strong> チェックイン前に **マックスバリュ糸満北店**（ホテルから車で7分）に立ち寄り、翌朝の朝食や飲み物を購入するのを忘れずに！<span class="text-sky-600 font-bold underline ml-1">MAPで見る <i class="fa-solid fa-arrow-right text-[9px]"></i></span>
+                                    </div>
+                                </div>
+                                <p class="text-slate-500 mt-1.5">読谷村から糸満市のホテルへドライブ移動（約50分）。天然ビーチ直結リゾートでゆったり贅沢な島時間を。</p>
                             </li>
                             <li class="relative cursor-pointer hover:bg-slate-50 p-1.5 rounded transition" onclick="scrollToMapAndFocus('matsumoto')">
                                 <div class="absolute -left-[23px] top-1 bg-rose-600 text-white w-4 h-4 rounded-full flex items-center justify-center text-[9px]"><i class="fa-solid fa-utensils"></i></div>
@@ -1343,6 +1349,7 @@
             'churayuki': { name: "琉球美ら雪 那覇国際通り店", lat: 26.2152, lng: 127.6888, color: "#ec4899", day: [1], desc: "Day1 スイーツ / 新感覚ふわふわミルクかき氷" },
             'bansho_tei': { name: "読谷村 番所亭 (ばんじゅてい)", lat: 26.3983, lng: 127.7420, color: "#f43f5e", day: [1], desc: "Day1 昼食 / 自家製よもぎ麺沖縄そば" },
             'zanpa': { name: "残波岬（ざんぱみさき）", lat: 26.4380, lng: 127.7125, color: "#0d9488", day: [1], desc: "Day1 絶景岬・白亜の灯台" },
+            'maxvalu': { name: "マックスバリュ糸満北店", lat: 26.1388, lng: 127.6740, color: "#e11d48", day: [1], desc: "Day1 買い出し / ホテルチェックイン前の朝食・飲み物調達" },
             'yomitan_resort': { name: "琉球ホテル＆リゾート 名城ビーチ", lat: 26.1132, lng: 127.6617, color: "#059669", day: [1, 2, 3], desc: "2泊連泊 天然名城ビーチ直結の最高級リゾート" },
             'matsumoto': { name: "あぐー豚しゃぶしゃぶ まつもと / 読谷店", lat: 26.2160, lng: 127.6810, color: "#f43f5e", day: [1], desc: "Day1 夕食 / ブランドあぐー豚しゃぶ" },
             'komaka_island': { name: "無人島・コマカ島（知念海洋レジャーセンター）", lat: 26.1630, lng: 127.8285, color: "#0ea5e9", day: [2], desc: "Day2 午前 / 無人島コマカ島スノーケリング(知念海洋レジャーセンターよりボート15分)" },
@@ -1355,7 +1362,7 @@
         };
 
         const dayRoutes = {
-            1: ['naha_airport', 'rental_car', 'churayuki', 'bansho_tei', 'zanpa', 'yomitan_resort', 'matsumoto', 'yomitan_resort'],
+            1: ['naha_airport', 'rental_car', 'churayuki', 'bansho_tei', 'zanpa', 'maxvalu', 'yomitan_resort', 'matsumoto', 'yomitan_resort'],
             2: ['yomitan_resort', 'komaka_island', 'itoman_fish', 'yomitan_resort', 'kyan_cape', 'yomitan_resort', 'horumonjin', 'yomitan_resort'],
             3: ['yomitan_resort', 'glass_village', 'himeyuri', 'umikaji', 'rental_car', 'naha_airport']
         };
