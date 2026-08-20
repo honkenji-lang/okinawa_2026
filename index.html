@@ -955,11 +955,22 @@
                         <textarea id="issue-body" rows="4" placeholder="例: 琉球の牛の予約時間を少し早めて、食後にホテルのプールサイドでのんびりカクテルを飲みたいです。" class="w-full p-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-ocean-500 focus:border-ocean-500 text-xs"></textarea>
                     </div>
 
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">合言葉 <span class="text-rose-500">*</span></label>
+                        <input type="password" id="issue-passphrase" required autocomplete="off" placeholder="旅のしおりで共有された合言葉" class="w-full p-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-ocean-500 focus:border-ocean-500 text-xs">
+                    </div>
+
+                    <!-- Honeypot: 人間の投稿者には見えない欄。埋まっていればボットとみなす -->
+                    <div class="absolute -left-[9999px] w-px h-px overflow-hidden" aria-hidden="true">
+                        <label for="issue-honeypot">Website</label>
+                        <input type="text" id="issue-honeypot" name="website" tabindex="-1" autocomplete="off">
+                    </div>
+
                     <div class="flex items-center justify-between pt-1">
-                        <span class="text-[11px] text-slate-400">※「送信」を押すとGitHub API経由でリアルタイムIssue作成されます。</span>
+                        <span class="text-[11px] text-slate-400">※GitHubアカウントは不要です。合言葉を入力して送信するとIssueが自動作成されます。</span>
                         <button type="submit" id="issue-submit-btn" class="bg-ocean-600 hover:bg-ocean-700 text-white font-bold px-5 py-2.5 rounded-lg text-xs shadow-xs transition-all flex items-center gap-2">
                             <i class="fa-solid fa-paper-plane"></i>
-                            <span>GitHub Issueを作成する</span>
+                            <span>送信する</span>
                         </button>
                     </div>
                 </form>
@@ -1160,6 +1171,7 @@
             document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
             loadChecklistState();
             renderIssueHistory();
+            loadSavedPassphrase();
         });
 
         // --- 6. Interactive Checklist Storage ---
@@ -1206,14 +1218,24 @@
             updateChecklistProgress();
         }
 
-        // --- 7. GitHub Issue API & Web Form Submission ---
+        // --- 7. GitHub Issue Submission via Netlify Function (no GitHub account required) ---
+        const ISSUE_SUBMIT_ENDPOINT = 'https://stirring-dieffenbachia-019748.netlify.app/.netlify/functions/create-issue';
         const GITHUB_REPO = 'honkenji-lang/okinawa_2026';
+        const PASSPHRASE_STORAGE_KEY = 'okinawa_issue_passphrase';
+
+        function loadSavedPassphrase() {
+            const input = document.getElementById('issue-passphrase');
+            const saved = localStorage.getItem(PASSPHRASE_STORAGE_KEY);
+            if (input && saved) input.value = saved;
+        }
 
         async function submitGitHubIssue(event) {
             event.preventDefault();
             const category = document.getElementById('issue-category').value;
             const titleInput = document.getElementById('issue-title').value.trim();
             const bodyInput = document.getElementById('issue-body').value.trim();
+            const passphrase = document.getElementById('issue-passphrase').value;
+            const honeypot = document.getElementById('issue-honeypot').value;
             const btn = document.getElementById('issue-submit-btn');
             const alertEl = document.getElementById('issue-alert');
 
@@ -1222,85 +1244,63 @@
             const issueTitle = `[${category}] ${titleInput}`;
             const issueBody = `${bodyInput}\n\n---\n*※このIssueは 「沖縄本島 旅のしおり 2026」 Webアプリから提出されました。*`;
 
-            const savedToken = localStorage.getItem('okinawa_gh_token');
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> <span>送信中...</span>`;
+            alertEl.classList.add('hidden');
 
-            // If GitHub PAT is saved in localStorage, attempt direct API call
-            if (savedToken) {
-                btn.disabled = true;
-                btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> <span>送信中...</span>`;
-                alertEl.classList.add('hidden');
+            try {
+                const res = await fetch(ISSUE_SUBMIT_ENDPOINT, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title: issueTitle, body: issueBody, passphrase, honeypot })
+                });
 
-                try {
-                    const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/issues`, {
-                        method: 'POST',
-                        headers: {
-                            'Authorization': `token ${savedToken}`,
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/vnd.github+json'
-                        },
-                        body: JSON.stringify({ title: issueTitle, body: issueBody })
-                    });
+                const data = await res.json().catch(() => ({}));
 
-                    if (res.ok) {
-                        const data = await res.json();
-                        alertEl.className = "p-3.5 rounded-xl text-xs flex items-center justify-between transition-all bg-emerald-50 border border-emerald-200 text-emerald-900";
-                        alertEl.innerHTML = `
-                            <div class="flex items-center gap-2">
-                                <i class="fa-solid fa-circle-check text-emerald-600 text-base"></i>
-                                <div>
-                                    <strong>GitHub Issue #${data.number} をリアルタイム作成しました！</strong>
-                                    <p class="text-[11px] text-emerald-700 font-medium">${escapeHtml(data.title)}</p>
-                                </div>
-                            </div>
-                            <a href="${data.html_url}" target="_blank" class="bg-emerald-600 text-white font-bold px-3 py-1.5 rounded text-[11px] hover:bg-emerald-700 shrink-0 ml-2">
-                                GitHubで見る <i class="fa-solid fa-up-right-from-square ml-1"></i>
-                            </a>`;
-                        alertEl.classList.remove('hidden');
-
-                        document.getElementById('issue-title').value = '';
-                        document.getElementById('issue-body').value = '';
-
-                        saveIssueToHistory({
-                            number: data.number,
-                            title: data.title,
-                            url: data.html_url,
-                            date: new Date().toLocaleString('ja-JP')
-                        });
-                        return;
-                    }
-                } catch (e) {
-                    console.error("Direct API submission error:", e);
-                } finally {
-                    btn.disabled = false;
-                    btn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> <span>GitHub Issueを作成する</span>`;
+                if (!res.ok) {
+                    throw new Error(data.error || `HTTP ${res.status}`);
                 }
-            }
 
-            // Fallback: 1-Click Pre-filled GitHub Issue URL
-            const githubIssueUrl = `https://github.com/${GITHUB_REPO}/issues/new?title=${encodeURIComponent(issueTitle)}&body=${encodeURIComponent(issueBody)}`;
-            
-            window.open(githubIssueUrl, '_blank');
-
-            alertEl.className = "p-3.5 rounded-xl text-xs flex items-center justify-between transition-all bg-sky-50 border border-sky-200 text-sky-900";
-            alertEl.innerHTML = `
-                <div class="flex items-center gap-2">
-                    <i class="fa-solid fa-arrow-up-right-from-square text-sky-600 text-base"></i>
-                    <div>
-                        <strong>GitHub Issue作成画面を開きました！</strong>
-                        <p class="text-[11px] text-sky-700 font-medium">${escapeHtml(issueTitle)}</p>
+                alertEl.className = "p-3.5 rounded-xl text-xs flex items-center justify-between transition-all bg-emerald-50 border border-emerald-200 text-emerald-900";
+                alertEl.innerHTML = `
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-circle-check text-emerald-600 text-base"></i>
+                        <div>
+                            <strong>GitHub Issue #${data.number} を作成しました！</strong>
+                            <p class="text-[11px] text-emerald-700 font-medium">${escapeHtml(data.title)}</p>
+                        </div>
                     </div>
-                </div>
-                <a href="${githubIssueUrl}" target="_blank" class="bg-sky-600 text-white font-bold px-3 py-1.5 rounded text-[11px] hover:bg-sky-700 shrink-0 ml-2">
-                    GitHubで開く <i class="fa-solid fa-up-right-from-square ml-1"></i>
-                </a>`;
-            alertEl.classList.remove('hidden');
+                    <a href="${data.html_url}" target="_blank" class="bg-emerald-600 text-white font-bold px-3 py-1.5 rounded text-[11px] hover:bg-emerald-700 shrink-0 ml-2">
+                        GitHubで見る <i class="fa-solid fa-up-right-from-square ml-1"></i>
+                    </a>`;
+                alertEl.classList.remove('hidden');
 
-            saveIssueToHistory({
-                number: 'NEW',
-                title: issueTitle,
-                url: githubIssueUrl,
-                date: new Date().toLocaleString('ja-JP')
-            });
+                document.getElementById('issue-title').value = '';
+                document.getElementById('issue-body').value = '';
+                localStorage.setItem(PASSPHRASE_STORAGE_KEY, passphrase);
+
+                saveIssueToHistory({
+                    number: data.number,
+                    title: data.title,
+                    url: data.html_url,
+                    date: new Date().toLocaleString('ja-JP')
+                });
+            } catch (e) {
+                console.error("Issue submission error:", e);
+                alertEl.className = "p-3.5 rounded-xl text-xs flex items-center justify-between transition-all bg-rose-50 border border-rose-200 text-rose-900";
+                alertEl.innerHTML = `
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-triangle-exclamation text-rose-600 text-base"></i>
+                        <div>
+                            <strong>送信に失敗しました。</strong>
+                            <p class="text-[11px] text-rose-700 font-medium">合言葉をご確認の上、もう一度お試しください。</p>
+                        </div>
+                    </div>`;
+                alertEl.classList.remove('hidden');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> <span>送信する</span>`;
+            }
         }
 
         function escapeHtml(str) {
