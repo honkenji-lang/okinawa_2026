@@ -408,11 +408,6 @@
                                 </div>
                                 <p class="text-slate-500 mt-1">那覇から糸満へ移動し、地元の新鮮なお魚を使った、美味しい海鮮バター焼きやお魚料理で大満足のランチ。</p>
                             </li>
-                            <li class="relative cursor-pointer hover:bg-slate-50 p-1.5 rounded transition" onclick="scrollToMapAndFocus('maxvalu')">
-                                <div class="absolute -left-[23px] top-1 bg-amber-500 text-white w-4 h-4 rounded-full flex items-center justify-center text-[9px]"><i class="fa-solid fa-cart-shopping"></i></div>
-                                <div class="font-bold text-slate-800 text-sm">14:00 - 14:45 【買い出し】マックスバリュ糸満北店</div>
-                                <p class="text-slate-500 mt-1">ホテルチェックイン前に、翌朝の朝食や滞在中の飲み物・おやつ等をここでまとめて調達しておきます！</p>
-                            </li>
                             <li class="relative cursor-pointer hover:bg-slate-50 p-1.5 rounded transition" onclick="scrollToMapAndFocus('yomitan_resort')">
                                 <div class="absolute -left-[23px] top-1 bg-emerald-600 text-white w-4 h-4 rounded-full flex items-center justify-center text-[9px]"><i class="fa-solid fa-hotel"></i></div>
                                 <div class="font-bold text-slate-800 text-sm">15:00 琉球ホテル＆リゾート 名城ビーチ チェックイン</div>
@@ -1346,7 +1341,6 @@
             'rental_car': { name: "スカイレンタカー 那覇空港店", lat: 26.1788, lng: 127.6534, color: "#4f46e5", day: [1, 3], desc: "9/19 09:30〜9/21 19:00 レンタル / 空港送迎11-B乗り場" },
             'plus_minus': { name: "PLUS MINUS (プラスマイナス)", lat: 26.1669, lng: 127.6676, color: "#ec4899", day: [1], desc: "Day1 スイーツ / 豊見城市座安の進化系ふわふわ巨大かき氷＆ホットドッグ" },
             'itoman_gyomin': { name: "糸満漁民食堂", lat: 26.1432, lng: 127.6622, color: "#f43f5e", day: [1], desc: "Day1 昼食 / 地元の新鮮なお魚を使った絶品イノベーティブ海鮮食堂" },
-            'maxvalu': { name: "マックスバリュ糸満北店", lat: 26.1388, lng: 127.6740, color: "#e11d48", day: [1], desc: "Day1 買い出し / ホテルチェックイン前の朝食・飲み物調達" },
             'yomitan_resort': { name: "琉球ホテル＆リゾート 名城ビーチ", lat: 26.1132, lng: 127.6617, color: "#059669", day: [1, 2, 3], desc: "2泊連泊 天然名城ビーチ直結の最高級リゾート" },
             'kenmin_steak': { name: "県民ステーキ 糸満店", lat: 26.1507, lng: 127.6736, color: "#f43f5e", day: [1], desc: "Day1 夕食(18:30) / 富士溶岩プレートの柔らかハラミステーキ＆食べ放題" },
             'itoman_fish': { name: "糸満お魚センター", lat: 26.1432, lng: 127.6651, color: "#f43f5e", day: [2], desc: "Day2 昼食 / 新鮮な海鮮食べ歩きランチ" },
@@ -1358,7 +1352,7 @@
         };
 
         const dayRoutes = {
-            1: ['naha_airport', 'rental_car', 'plus_minus', 'itoman_gyomin', 'maxvalu', 'yomitan_resort', 'kenmin_steak', 'yomitan_resort'],
+            1: ['naha_airport', 'rental_car', 'plus_minus', 'itoman_gyomin', 'yomitan_resort', 'kenmin_steak', 'yomitan_resort'],
             2: ['yomitan_resort', 'kyan_cape', 'yomitan_resort', 'itoman_fish', 'yomitan_resort', 'horumonjin', 'yomitan_resort'],
             3: ['yomitan_resort', 'glass_village', 'himeyuri', 'umikaji', 'rental_car', 'naha_airport']
         };
