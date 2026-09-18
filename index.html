@@ -377,7 +377,10 @@
                         <ul class="relative border-l-2 border-sky-300 ml-3 space-y-3.5 pl-4 text-xs">
                             <li class="relative cursor-pointer hover:bg-slate-50 p-1.5 rounded transition" onclick="scrollToMapAndFocus('funabashi_bus')">
                                 <div class="absolute -left-[23px] top-1 bg-amber-500 text-white w-4 h-4 rounded-full flex items-center justify-center text-[9px]"><i class="fa-solid fa-bus"></i></div>
-                                <div class="font-bold text-slate-800 text-sm">04:55 船橋駅発 リムジンバス乗車 ➔ 05:45 羽田T2着</div>
+                                <div class="font-bold text-slate-800 text-sm flex items-center justify-between">
+                                    <span>04:55 船橋駅発 リムジンバス乗車 ➔ 05:45 羽田T2着</span>
+                                    <a href="http://rps.ana.co.jp/web/ncnv/uu/asm/all2850.php" target="_blank" class="text-sky-600 hover:underline font-semibold text-[10px] flex items-center gap-0.5" onclick="event.stopPropagation();"><i class="fa-solid fa-up-right-from-square"></i> ANA運航状況</a>
+                                </div>
                                 <p class="text-slate-500">羽田空港第2ターミナル（ANA発着）へ約50分。05:45頃到着（NH993便 06:45発）。</p>
                                 <div class="mt-1.5 p-2 bg-amber-50 border border-amber-200 rounded text-[11px] text-amber-900">
                                     <i class="fa-solid fa-triangle-exclamation text-amber-600 mr-1"></i><strong>【ANA手荷物預かり締切】 出発30分前（06:15締切）厳守</strong><br>
@@ -534,7 +537,10 @@
                             </li>
                             <li class="relative cursor-pointer hover:bg-slate-50 p-1.5 rounded transition" onclick="scrollToMapAndFocus('haneda_t2')">
                                 <div class="absolute -left-[23px] top-1 bg-rose-600 text-white w-4 h-4 rounded-full flex items-center justify-center text-[9px]"><i class="fa-solid fa-plane-landing"></i></div>
-                                <div class="font-bold text-slate-800 text-sm">19:40 那覇発 (NH1096便) ➔ 羽田着 (22:10)</div>
+                                <div class="font-bold text-slate-800 text-sm flex items-center justify-between">
+                                    <span>19:40 那覇発 (NH1096便) ➔ 羽田着 (22:10)</span>
+                                    <a href="http://rps.ana.co.jp/web/ncnv/uu/asm/all2850.php" target="_blank" class="text-sky-600 hover:underline font-semibold text-[10px] flex items-center gap-0.5" onclick="event.stopPropagation();"><i class="fa-solid fa-up-right-from-square"></i> ANA運航状況</a>
+                                </div>
                                 <p class="text-slate-500">定刻22:10羽田空港着。荷物受け取り後、1階13番乗り場へ。</p>
                             </li>
                             <li class="relative cursor-pointer hover:bg-slate-50 p-1.5 rounded transition" onclick="scrollToMapAndFocus('funabashi_bus')">
@@ -835,9 +841,12 @@
             <!-- Flight & Car Advice -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                 <div class="bg-white p-3.5 rounded-xl border border-slate-200 space-y-2">
-                    <h4 class="font-bold text-slate-800 text-sm flex items-center gap-1.5 text-sky-700">
-                        <i class="fa-solid fa-plane"></i> 航空便（ANA便）ポイント
-                    </h4>
+                    <div class="flex items-center justify-between">
+                        <h4 class="font-bold text-slate-800 text-sm flex items-center gap-1.5 text-sky-700">
+                            <i class="fa-solid fa-plane"></i> 航空便（ANA便）ポイント
+                        </h4>
+                        <a href="http://rps.ana.co.jp/web/ncnv/uu/asm/all2850.php" target="_blank" class="text-sky-600 hover:underline font-bold text-[11px] flex items-center gap-1"><i class="fa-solid fa-up-right-from-square"></i> ANA 運航状況のご案内</a>
+                    </div>
                     <div class="p-2 bg-amber-50 border border-amber-200 rounded text-[11px] text-amber-900">
                         <i class="fa-solid fa-triangle-exclamation text-amber-600 mr-1"></i><strong>手荷物預かり受付締切: 出発30分前厳守！</strong><br>
                         ・往路（羽田発 NH993便 06:45発）: <strong>06:15 締切</strong><br>
@@ -848,6 +857,7 @@
                         <li><strong>羽田第2ターミナル(T2)</strong>からの出発となります。</li>
                         <li>保安検査場は出発20分前（往路: 06:25 / 復路: 19:20）までに通過が必要です。</li>
                         <li>那覇空港到着後は手荷物をスムーズに受け取り送迎バス乗り場（11-B）へ。</li>
+                        <li>当日の最新フライト発着・遅延状況は <a href="http://rps.ana.co.jp/web/ncnv/uu/asm/all2850.php" target="_blank" class="text-sky-600 font-bold underline">ANA 運航状況のご案内ページ</a> よりご確認いただけます。</li>
                     </ul>
                 </div>
                 <div class="bg-white p-3.5 rounded-xl border border-slate-200 space-y-2">
